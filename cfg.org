@@ -1,0 +1,1015 @@
+ #+title: Cfg
+ #+PROPERTY: header-args :tangle cfg.el
+* Packages
+#+begin_src elisp
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode)
+  )
+(use-package request)
+(use-package markdown-mode)
+(use-package shell-maker)
+(use-package copilot
+  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+  :ensure t)
+
+(setq org-support-shift-select t)
+
+(use-package gptel
+  :straight (:host github :repo "karthink/gptel"))
+(use-package centered-window) 
+(use-package nov)
+(use-package nov-xwidget
+  :straight (:host github :repo "chenyanming/nov-xwidget" :files ("*.el")))
+(use-package multiple-cursors)
+;;(use-package conda)
+(use-package fzf)
+(use-package lsp-pyright)
+(use-package windresize)
+(use-package magit)
+(use-package web-mode)
+(use-package all-the-icons
+  :ensure t)
+(use-package treemacs)
+(use-package visual-fill-column
+  :ensure t)
+#+end_src
+
+ #+RESULTS:
+ 
+* General
+** Misc configurations
+#+begin_src elisp
+;; Establecer UTF-8 como la codificación por defecto
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type `relative)
+(setq display-line-numbers-mode t)
+(global-display-line-numbers-mode)
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/org/")
+(setq default-directory "~/")
+
+;; set alpha background
+(add-to-list 'default-frame-alist '(alpha-background . 95))
+;;change init file of emacs to > ~/Dashboard.org 
+(setq inhibit-startup-screen t)
+(setq initial-scratch-message nil)
+(setq startup-scratch-buffer nil)
+(setq scroll-margin 40)
+(setq scroll-conservatively 101)
+(setq scroll-preserve-screen-position t)
+(setq scroll-step 1)
+(global-visual-line-mode 0)
+  ;;(centered-window-mode t)
+;;Org eval without ask
+(setq org-confirm-babel-evaluate nil)
+(setq show-paren-mode t)
+(setq org-bullets-mode t)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(add-to-list 'default-frame-alist '(drag-internal-border . 1))
+(add-to-list 'default-frame-alist '(internal-border-width . 5))
+ ;; "Yes or no"? Too much writing
+;;(defalias 'yes-or-no-p 'y-or-n-p)
+;;load env.el
+(load-file "~/env.el")
+(set-face-attribute 'default nil :height 160 :weight 'bold)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(setq recentf-max-saved-items 25)
+(use-package nerd-icons
+  :ensure t)
+;; set font ubuntu mono nerd
+(set-face-attribute 'default-frame-alist '(font "UbuntuMono Nerd Font Mono"))
+(set-fontset-font t 'symbol (font-spec :family "Segoe UI Emoji") nil 'prepend)
+(add-to-list 'exec-path "C:/Program Files/Git/usr/bin")
+#+end_src
+
+#+RESULTS:
+
+** LSP 
+#+begin_src elisp
+;; yasnippet
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
+(use-package lsp-pyright
+   :ensure t
+   :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
+   :hook (python-mode . (lambda ()
+			     (require 'lsp-pyright)
+			     (lsp)))
+   
+
+   )
+#+end_src
+
+#+RESULTS:
+| hs-minor-mode | #[nil ((require 'lsp-pyright) (lsp)) nil] |
+
+** Python
+
+#+begin_src elisp
+;; Enable hs minor mode
+(add-hook 'python-mode-hook 'hs-minor-mode)
+(setq python-indent-offset 2 )
+(setq org-edit-src-content-indentation 0)
+
+#+end_src
+
+#+RESULTS:
+: 0
+
+#+begin_src elisp
+
+
+#+end_src
+
+** RecentfHook
+#+begin_src elisp
+(add-hook 'save-buffer 'recentf-save-list)
+
+#+end_src
+
+#+RESULTS:
+| recentf-save-list |
+
+** Rust
+#+begin_src elisp
+(use-package rust-ts-mode
+  :ensure t
+  :hook (rust-ts-mode . lsp)
+  :config
+  (setq rust-ts-mode-indent-offset 2)
+  (setq rust-ts-mode-hook 'hs-minor-mode)
+  (add-hook 'rust-ts-mode-hook 'hs-minor-mode))
+
+#+end_src
+
+#+RESULTS:
+| lsp |
+
+** Astro
+#+begin_src elisp
+
+(define-derived-mode astro-mode web-mode "Astro")
+
+(add-to-list 'auto-mode-alist '("\\.astro\\'" . astro-mode))
+
+
+#+end_src
+
+#+RESULTS:
+: ((\.astro\' . astro-mode) (^yang\.settings$ . jsonc-mode) (\.epub\' . nov-mode) (/git-rebase-todo\' . git-rebase-mode) (\.\(?:md\|markdown\|mkd\|mdown\|mkdn\|mdwn\)\' . markdown-mode) (\.lua\' . lua-mode) (\.gpg\(~\|\.~[0-9]+~\)?\' nil epa-file) (\.elc\' . elisp-byte-code-mode) (\.zst\' nil jka-compr) (\.dz\' nil jka-compr) (\.xz\' nil jka-compr) (\.lzma\' nil jka-compr) (\.lz\' nil jka-compr) (\.g?z\' nil jka-compr) (\.bz2\' nil jka-compr) (\.Z\' nil jka-compr) (\.vr[hi]?\' . vera-mode) (\(?:\.\(?:rbw?\|ru\|rake\|thor\|axlsx\|jbuilder\|rabl\|gemspec\|podspec\)\|/\(?:Gem\|Rake\|Cap\|Thor\|Puppet\|Berks\|Brew\|Fast\|Vagrant\|Guard\|Pod\)file\)\' . ruby-mode) (\.re?st\' . rst-mode) (/\(?:Pipfile\|\.?flake8\)\' . conf-mode) (\.py[iw]?\' . python-mode) (\.m\' . octave-maybe-mode) (\.less\' . less-css-mode) (\.editorconfig\' . editorconfig-conf-mode) (\.scss\' . scss-mode) (\.cs\' . csharp-mode) (\.awk\' . awk-mode) (\.\(u?lpc\|pike\|pmod\(\.in\)?\)\' . pike-mode) (\.idl\' . idl-mode) (\.java\' . java-mode) (\.m\' . objc-mode) (\.ii\' . c++-mode) (\.i\' . c-mode) (\.lex\' . c-mode) (\.y\(acc\)?\' . c-mode) (\.h\' . c-or-c++-mode) (\.c\' . c-mode) (\.\(CC?\|HH?\)\' . c++-mode) (\.[ch]\(pp\|xx\|\+\+\)\' . c++-mode) (\.\(cc\|hh\)\' . c++-mode) (\.\(bat\|cmd\)\' . bat-mode) (\.[sx]?html?\(\.[a-zA-Z_]+\)?\' . mhtml-mode) (\.svgz?\' . image-mode) (\.svgz?\' . xml-mode) (\.x[bp]m\' . image-mode) (\.x[bp]m\' . c-mode) (\.p[bpgn]m\' . image-mode) (\.tiff?\' . image-mode) (\.gif\' . image-mode) (\.png\' . image-mode) (\.jpe?g\' . image-mode) (\.webp\' . image-mode) (\.te?xt\' . text-mode) (\.[tT]e[xX]\' . tex-mode) (\.ins\' . tex-mode) (\.ltx\' . latex-mode) (\.dtx\' . doctex-mode) (\.org\' . org-mode) (\.dir-locals\(?:-2\)?\.el\' . lisp-data-mode) (\.eld\' . lisp-data-mode) (eww-bookmarks\' . lisp-data-mode) (tramp\' . lisp-data-mode) (/archive-contents\' . lisp-data-mode) (places\' . lisp-data-mode) (\.emacs-places\' . lisp-data-mode) (\.el\' . emacs-lisp-mode) (Project\.ede\' . emacs-lisp-mode) (\(?:\.\(?:scm\|sls\|sld\|stk\|ss\|sch\)\|/\.guile\)\' . scheme-mode) (\.l\' . lisp-mode) (\.li?sp\' . lisp-mode) (\.[fF]\' . fortran-mode) (\.for\' . fortran-mode) (\.p\' . pascal-mode) (\.pas\' . pascal-mode) (\.\(dpr\|DPR\)\' . delphi-mode) (\.\([pP]\([Llm]\|erl\|od\)\|al\)\' . perl-mode) (Imakefile\' . makefile-imake-mode) (Makeppfile\(?:\.mk\)?\' . makefile-makepp-mode) (\.makepp\' . makefile-makepp-mode) (\.mk\' . makefile-gmake-mode) (\.make\' . makefile-gmake-mode) ([Mm]akefile\' . makefile-gmake-mode) (\.am\' . makefile-automake-mode) (\.texinfo\' . texinfo-mode) (\.te?xi\' . texinfo-mode) (\.[sS]\' . asm-mode) (\.asm\' . asm-mode) (\.css\' . css-mode) (\.mixal\' . mixal-mode) (\.gcov\' . compilation-mode) (/\.[a-z0-9-]*gdbinit . gdb-script-mode) (-gdb\.gdb . gdb-script-mode) ([cC]hange\.?[lL]og?\' . change-log-mode) ([cC]hange[lL]og[-.][0-9]+\' . change-log-mode) (\$CHANGE_LOG\$\.TXT . change-log-mode) (\.scm\.[0-9]*\' . scheme-mode) (\.[ckz]?sh\'\|\.shar\'\|/\.z?profile\' . sh-mode) (\.bash\' . sh-mode) (/PKGBUILD\' . sh-mode) (\(/\|\`\)\.\(bash_\(profile\|history\|log\(in\|out\)\)\|z?log\(in\|out\)\)\' . sh-mode) (\(/\|\`\)\.\(shrc\|zshrc\|m?kshrc\|bashrc\|t?cshrc\|esrc\)\' . sh-mode) (\(/\|\`\)\.\([kz]shenv\|xinitrc\|startxrc\|xsession\)\' . sh-mode) (\.m?spec\' . sh-mode) (\.m[mes]\' . nroff-mode) (\.man\' . nroff-mode) (\.sty\' . latex-mode) (\.cl[so]\' . latex-mode) (\.bbl\' . latex-mode) (\.bib\' . bibtex-mode) (\.bst\' . bibtex-style-mode) (\.sql\' . sql-mode) (\(acinclude\|aclocal\|acsite\)\.m4\' . autoconf-mode) (\.m[4c]\' . m4-mode) (\.mf\' . metafont-mode) (\.mp\' . metapost-mode) (\.vhdl?\' . vhdl-mode) (\.article\' . text-mode) (\.letter\' . text-mode) (\.i?tcl\' . tcl-mode) (\.exp\' . tcl-mode) (\.itk\' . tcl-mode) (\.icn\' . icon-mode) (\.sim\' . simula-mode) (\.mss\' . scribe-mode) (\.f9[05]\' . f90-mode) (\.f0[38]\' . f90-mode) (\.indent\.pro\' . fundamental-mode) (\.\(pro\|PRO\)\' . idlwave-mode) (\.srt\' . srecode-template-mode) (\.prolog\' . prolog-mode) (\.tar\' . tar-mode) (\.\(arc\|zip\|lzh\|lha\|zoo\|[jew]ar\|xpi\|rar\|cbr\|7z\|squashfs\|ARC\|ZIP\|LZH\|LHA\|ZOO\|[JEW]AR\|XPI\|RAR\|CBR\|7Z\|SQUASHFS\)\' . archive-mode) (\.oxt\' . archive-mode) (\.\(deb\|[oi]pk\)\' . archive-mode) (\`/tmp/Re . text-mode) (/Message[0-9]*\' . text-mode) (\`/tmp/fol/ . text-mode) (\.oak\' . scheme-mode) (\.sgml?\' . sgml-mode) (\.x[ms]l\' . xml-mode) (\.dbk\' . xml-mode) (\.dtd\' . sgml-mode) (\.ds\(ss\)?l\' . dsssl-mode) (\.js[mx]?\' . javascript-mode) (\.har\' . javascript-mode) (\.json\' . js-json-mode) (\.[ds]?va?h?\' . verilog-mode) (\.by\' . bovine-grammar-mode) (\.wy\' . wisent-grammar-mode) (\.erts\' . erts-mode) ([:/\]\..*\(emacs\|gnus\|viper\)\' . emacs-lisp-mode) (\`\..*emacs\' . emacs-lisp-mode) ([:/]_emacs\' . emacs-lisp-mode) (/crontab\.X*[0-9]+\' . shell-script-mode) (\.ml\' . lisp-mode) (\.ld[si]?\' . ld-script-mode) (ld\.?script\' . ld-script-mode) (\.xs\' . c-mode) (\.x[abdsru]?[cnw]?\' . ld-script-mode) (\.zone\' . dns-mode) (\.soa\' . dns-mode) (\.asd\' . lisp-mode) (\.\(asn\|mib\|smi\)\' . snmp-mode) (\.\(as\|mi\|sm\)2\' . snmpv2-mode) (\.\(diffs?\|patch\|rej\)\' . diff-mode) (\.\(dif\|pat\)\' . diff-mode) (\.[eE]?[pP][sS]\' . ps-mode) (\.\(?:PDF\|EPUB\|CBZ\|FB2\|O?XPS\|DVI\|OD[FGPST]\|DOCX\|XLSX?\|PPTX?\|pdf\|epub\|cbz\|fb2\|o?xps\|djvu\|dvi\|od[fgpst]\|docx\|xlsx?\|pptx?\)\' . doc-view-mode-maybe) (configure\.\(ac\|in\)\' . autoconf-mode) (\.s\(v\|iv\|ieve\)\' . sieve-mode) (BROWSE\' . ebrowse-tree-mode) (\.ebrowse\' . ebrowse-tree-mode) (#\*mail\* . mail-mode) (\.g\' . antlr-mode) (\.mod\' . m2-mode) (\.ses\' . ses-mode) (\.docbook\' . sgml-mode) (\.com\' . dcl-mode) (/config\.\(?:bat\|log\)\' . fundamental-mode) (/\.?\(authinfo\|netrc\)\' . authinfo-mode) (\.\(?:[iI][nN][iI]\|[lL][sS][tT]\|[rR][eE][gG]\|[sS][yY][sS]\)\' . conf-mode) (\.la\' . conf-unix-mode) (\.ppd\' . conf-ppd-mode) (java.+\.conf\' . conf-javaprop-mode) (\.properties\(?:\.[a-zA-Z0-9._-]+\)?\' . conf-javaprop-mode) (\.toml\' . conf-toml-mode) (\.desktop\' . conf-desktop-mode) (/\.redshift\.conf\' . conf-windows-mode) (\`/etc/\(?:DIR_COLORS\|ethers\|.?fstab\|.*hosts\|lesskey\|login\.?de\(?:fs\|vperm\)\|magic\|mtab\|pam\.d/.*\|permissions\(?:\.d/.+\)?\|protocols\|rpc\|services\)\' . conf-space-mode) (\`/etc/\(?:acpid?/.+\|aliases\(?:\.d/.+\)?\|default/.+\|group-?\|hosts\..+\|inittab\|ksysguarddrc\|opera6rc\|passwd-?\|shadow-?\|sysconfig/.+\)\' . conf-mode) ([cC]hange[lL]og[-.][-0-9a-z]+\' . change-log-mode) (/\.?\(?:gitconfig\|gnokiirc\|hgrc\|kde.*rc\|mime\.types\|wgetrc\)\' . conf-mode) (/\.mailmap\' . conf-unix-mode) (/\.\(?:asound\|enigma\|fetchmail\|gltron\|gtk\|hxplayer\|mairix\|mbsync\|msmtp\|net\|neverball\|nvidia-settings-\|offlineimap\|qt/.+\|realplayer\|reportbug\|rtorrent\.\|screen\|scummvm\|sversion\|sylpheed/.+\|xmp\)rc\' . conf-mode) (/\.\(?:gdbtkinit\|grip\|mpdconf\|notmuch-config\|orbital/.+txt\|rhosts\|tuxracer/options\)\' . conf-mode) (/\.?X\(?:default\|resource\|re\)s\> . conf-xdefaults-mode) (/X11.+app-defaults/\|\.ad\' . conf-xdefaults-mode) (/X11.+locale/.+/Compose\' . conf-colon-mode) (/X11.+locale/compose\.dir\' . conf-javaprop-mode) (\.~?[0-9]+\.[0-9][-.0-9]*~?\' nil t) (\.\(?:orig\|in\|[bB][aA][kK]\)\' nil t) ([/.]c\(?:on\)?f\(?:i?g\)?\(?:\.[a-zA-Z0-9._-]+\)?\' . conf-mode-maybe) (\.[1-9]\' . nroff-mode) (\.art\' . image-mode) (\.avs\' . image-mode) (\.bmp\' . image-mode) (\.cmyk\' . image-mode) (\.cmyka\' . image-mode) (\.crw\' . image-mode) (\.dcr\' . image-mode) (\.dcx\' . image-mode) (\.dng\' . image-mode) (\.dpx\' . image-mode) (\.fax\' . image-mode) (\.heic\' . image-mode) (\.hrz\' . image-mode) (\.icb\' . image-mode) (\.icc\' . image-mode) (\.icm\' . image-mode) (\.ico\' . image-mode) (\.icon\' . image-mode) (\.jbg\' . image-mode) (\.jbig\' . image-mode) (\.jng\' . image-mode) (\.jnx\' . image-mode) (\.miff\' . image-mode) (\.mng\' . image-mode) (\.mvg\' . image-mode) (\.otb\' . image-mode) (\.p7\' . image-mode) (\.pcx\' . image-mode) (\.pdb\' . image-mode) (\.pfa\' . image-mode) (\.pfb\' . image-mode) (\.picon\' . image-mode) (\.pict\' . image-mode) (\.rgb\' . image-mode) (\.rgba\' . image-mode) (\.tga\' . image-mode) (\.wbmp\' . image-mode) (\.webp\' . image-mode) (\.wmf\' . image-mode) (\.wpg\' . image-mode) (\.xcf\' . image-mode) (\.xmp\' . image-mode) (\.xwd\' . image-mode) (\.yuv\' . image-mode) (\.tgz\' . tar-mode) (\.tbz2?\' . tar-mode) (\.txz\' . tar-mode) (\.tzst\' . tar-mode))
+
+** hs-mode
+ #+begin_src elisp
+   (setq hs-show t)
+   (defun hs-toggle-all ()
+     "Alternate between hs-hide-all and hs-show-all."
+     (interactive)
+     (setq ((hs-show (if (boundp 'hs-show) (not hs-show) t)))
+       (if hs-show
+	   (progn
+	     (hs-show-all)
+	     (setq hs-show nil))
+	 (progn
+	   (hs-hide-all)
+	   (setq hs-show t)))))
+#+end_src
+
+#+RESULTS:
+: hs-toggle-all
+
+** Org
+
+#+begin_src elisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)(shell . t)(eshell . t)(emacs-lisp . t)(dot . t)
+   ))
+
+#+end_src
+
+#+RESULTS:
+: t
+** Rust
+#+begin_src elisp
+  (use-package rust-ts-mode
+    :ensure t
+    :hook (rust-ts-mode . lsp)
+    :config
+    (setq rust-ts-mode-indent-offset 2)
+    (setq rust-ts-mode-indent-offset 2)
+    (setq rust-ts-mode-hook 'hs-minor-mode)
+    (add-hook 'rust-ts-mode-hook 'hs-minor-mode))
+
+#+end_src
+
+* Plugins
+** Copilot
+#+begin_src elisp
+(define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+(add-hook 'prog-mode-hook 'copilot-mode)
+(define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
+(setq copilot-indentation-alist
+      (append '((emacs-lisp-mode lisp-indent-offset)
+                (latex-mode tex-indent-basic)
+                (lisp-mode lisp-indent-offset)
+                (nxml-mode nxml-child-indent)
+                (python-mode python-indent py-indent-offset python-indent-offset)
+                (python-ts-mode python-indent py-indent-offset python-indent-offset)
+                (web-mode web-mode-markup-indent-offset web-mode-html-offset)
+                (org-mode org-indent-mode)) ; Add this line for Org mode
+              editorconfig-indentation-alist))
+
+(setq copilot-indent-offset-warning-disable t) ; Disable the warning
+(add-hook 'org-mode-hook 'copilot-mode)
+#+end_src
+
+#+RESULTS:
+| copilot-mode | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-bullets-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+** Hyperbole
+#+begin_src elisp
+(require 'hyperbole)
+(hyperbole-mode 1)
+
+#+end_src
+#+RESULTS:
+: t
+
+** Nov.el
+#+begin_src elisp
+;; Enable nov.el for .epub files
+(add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+
+;; Optional: Configure text width
+(setq nov-text-width 80)
+
+;; Optional: Disable variable pitch font
+(setq nov-variable-pitch nil)
+
+;; Optional: For better text display with visual-line-mode
+(setq nov-text-width t)
+(add-hook 'nov-mode-hook 'visual-line-mode)
+(add-hook 'nov-mode-hook 'visual-fill-column-mode)
+#+end_src
+
+#+RESULTS:
+: C:/Program Files/7-Zip/7z.exe
+
+** Gptel
+#+begin_src elisp
+
+(setq gptel-api-key (getenv "DEEPSEEK_API_KEY")) ; Or set it directly as a string
+;; Configure the backend for DeepSeek
+;; OPTIONAL configuration
+(setq gptel-model   'deepseek-chat
+	gptel-backend
+	(gptel-make-openai "DeepSeek"     ;Any name you want
+	  :host "api.deepseek.com"
+	  :endpoint "/chat/completions"
+	  :stream t
+	  :key gptel-api-key ;be a function that returns the key
+	  :models '(deepseek-chat deepseek-coder)))
+
+(setq gptel-api-key (getenv "GROK_API_KEY")) ; Or set it directly as a string
+;; xAI offers an OpenAI compatible API
+(gptel-make-openai "xAI"           ;Any name you want
+:host "api.x.ai"
+:key gptel-api-key              ;can be a function that returns the key
+:endpoint "/v1/chat/completions"
+:stream t
+:models '(;; xAI now only offers `grok-beta` as of the time of this writing
+	    grok-3-mini-beta))
+
+#+end_src
+
+#+RESULTS:
+: #s(gptel-openai "xAI" "api.x.ai" #<subr F616e6f6e796d6f75732d6c616d626461_anonymous_lambda_18> "https" t "/v1/chat/completions" "xai-EqY7BVHPknPAQc1uMUqgKNpiFOEMOSJAw6KMNQYvE7jFoQhLAJYEQLwXpp26DmZXZOHBIVfFUOxwKWg9" (grok-3-mini-beta) "https://api.x.ai/v1/chat/completions" nil nil)
+
+** Meow
+#+begin_src elisp
+(defun meow-setup ()
+
+(setq meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
+
+(meow-motion-overwrite-define-key
+
+'("j" . meow-next)
+
+'("k" . meow-prev)
+
+'("<escape>" . ignore))
+
+(meow-leader-define-key
+
+;; SPC j/k will run the original command in MOTION state.
+
+'("k" . "H-k")
+
+;; Use SPC (0-9) for digit arguments.
+
+'("1" . meow-digit-argument)
+
+'("2" . meow-digit-argument)
+
+'("3" . meow-digit-argument)
+
+'("4" . meow-digit-argument)
+
+'("5" . meow-digit-argument)
+
+'("6" . meow-digit-argument)
+
+'("7" . meow-digit-argument)
+
+'("8" . meow-digit-argument)
+
+'("9" . meow-digit-argument)
+
+'("0" . meow-digit-argument)
+
+'("/" . meow-keypad-describe-key)
+
+'("?" . meow-cheatsheet))
+
+(meow-normal-define-key
+
+'("0" . meow-expand-0)
+
+'("9" . meow-expand-9)
+
+'("8" . meow-expand-8)
+
+'("7" . meow-expand-7)
+
+'("6" . meow-expand-6)
+
+'("5" . meow-expand-5)
+
+'("4" . meow-expand-4)
+
+'("3" . meow-expand-3)
+
+'("2" . meow-expand-2)
+
+'("1" . meow-expand-1)
+
+'("-" . negative-argument)
+
+'(";" . meow-reverse)
+
+'("," . meow-inner-of-thing)
+
+'("." . meow-bounds-of-thing)
+
+'("[" . meow-beginning-of-thing)
+
+'("]" . meow-end-of-thing)
+
+'("a" . meow-append)
+
+'("A" . meow-open-below)
+
+'("b" . meow-back-word)
+
+'("B" . meow-back-symbol)
+
+'("c" . meow-change)
+
+'("d" . meow-delete)
+
+'("D" . meow-backward-delete)
+
+'("e" . meow-next-word)
+
+'("E" . meow-next-symbol)
+
+'("f" . meow-find)
+
+'("g" . meow-cancel-selection)
+
+'("G" . meow-grab)
+
+'("h" . meow-left)
+
+'("H" . meow-left-expand)
+
+'("i" . meow-insert)
+
+'("I" . meow-open-above)
+
+'("j" . meow-next)
+
+'("J" . meow-next-expand)
+
+'("k" . meow-prev)
+
+'("K" . meow-prev-expand)
+
+'("l" . meow-right)
+
+'("L" . meow-right-expand)
+
+'("m" . meow-join)
+
+'("n" . meow-search)
+
+'("o" . meow-block)
+
+'("O" . meow-to-block)
+
+'("p" . meow-yank)
+
+'("q" . meow-quit)
+
+'("Q" . meow-goto-line)
+
+'("r" . meow-replace)
+
+'("R" . meow-swap-grab)
+
+'("s" . meow-kill)
+
+'("t" . meow-till)
+
+'("u" . meow-undo)
+
+'("U" . meow-undo-in-selection)
+
+'("v" . meow-visit)
+
+'("w" . meow-mark-word)
+
+'("W" . meow-mark-symbol)
+
+'("x" . meow-line)
+
+'("X" . meow-goto-line)
+
+'("y" . meow-save)
+
+'("Y" . meow-sync-grab)
+
+'("z" . meow-pop-selection)
+
+'("'" . repeat)
+
+'("<escape>" . ignore)))
+
+(use-package meow
+
+:config
+
+(meow-global-mode 1)
+
+(meow-setup))
+#+end_src
+
+#+RESULTS:
+: t
+** Uv
+#+begin_src elisp
+
+(defun uv-activate ()
+  "send command to activate virtual environment."
+  (interactive)
+  (let ((default-directory "C:\\Users\\Pit\\.venv\\Scripts\\"))
+    (shell-command "activate.bat")))
+;; set default python interpreter
+(setq python-shell-interpreter "C:\\Users\\Pit\\.venv\\Scripts\\python.exe")
+  (setq lsp-pyright-python-executable-cmd "C://Users//Pit//.venv//Scripts//python.exe")
+(uv-activate)
+
+;; lsp configuration
+(use-package lsp-mode
+  :ensure t
+  :hook (python-mode . lsp)
+  :config
+  (setq lsp-pyright-venv-path "C:\\Users\\Pit\\.venv")
+  (setq lsp-pyright-venv "C:\\Users\\Pit\\.venv"))
+;;org configuration
+
+(setq org-babel-python-command "C:\\Users\\Pit\\.venv\\Scripts\\python.exe")
+
+#+end_src
+#+RESULTS:
+: C:\Users\Pit\.venv\Scripts\python.exe
+** Company
+ #+begin_src elisp
+   (use-package company
+     :ensure t
+     :config
+     (setq company-backends
+	'(company-fzf
+	  company-capf
+	  company-files
+	  company-yasnippet
+	  company-dabbrev
+	  company-keywords
+	  company-dict
+	  company-lsp ; Enable LSP backend
+	  )))
+   (use-package lsp-mode
+     :ensure t
+     :config
+     (setq company-backends
+	'(company-fzf
+	  company-capf
+	  company-files
+	  company-yasnippet
+	  company-dabbrev
+	  company-keywords
+	  company-dict
+	  company-lsp ; Enable LSP backend
+	  )))
+
+   (use-package company-lsp
+     :ensure t)
+
+ #+end_src 
+
+ #+RESULTS:
+** Obsidian
+#+begin_src elisp  
+
+(use-package obsidian
+  :config
+  (global-obsidian-mode t)
+  (obsidian-backlinks-mode t)
+  :custom
+  ;; location of obsidian vault
+  (obsidian-directory "~/Notes")
+  ;; Default location for new notes from `obsidian-capture'
+  (obsidian-inbox-directory "Inbox")
+  ;; Useful if you're going to be using wiki links
+  (markdown-enable-wiki-links t)
+  ;; These bindings are only suggestions; it's okay to use other bindings
+  :bind (:map obsidian-mode-map
+              ;; Create note
+              ("C-c C-n" . obsidian-capture)
+              ;; If you prefer you can use `obsidian-insert-wikilink'
+              ("C-c C-l" . obsidian-insert-link)
+              ;; Open file pointed to by link at point
+              ("C-c C-o" . obsidian-follow-link-at-point)
+              ;; Open a different note from vault
+              ("C-c C-p" . obsidian-jump)
+              ;; Follow a backlink for the current file
+              ("C-c C-b" . obsidian-backlink-jump)))
+
+
+#+end_src
+
+#+RESULTS:
+*** 
+* Custom Funcs
+** Repeat source block
+#+begin_src elisp
+  (defun org-repeat-src()
+    (interactive)
+    (setq cursorpos (line-beginning-position))
+    (setq linecontent (search-backward-regexp "^#\\+begin_src" nil t))
+    (setq line (thing-at-point 'line))
+    (setq l (concat line "\n\n#+end_src"))
+    (progn
+      (goto-char cursorpos)
+      (insert l)      
+    ))
+    
+#+end_src
+
+#+RESULTS:
+: org-repeat-src
+** Inser Src
+#+begin_src elisp
+(defun org-insert-src-block (lang)
+  "Insert a source block for the specified LANG."
+  (interactive "sLanguage: ")
+  (insert (format "#+begin_src %s :results output\n\n#+end_src\n" lang))
+  (backward-char 7)) ; Move cursor to the end of the block
+#+end_src 
+** Er-sudo
+#+begin_src elisp :results output
+(defun er-sudo-edit (&optional arg)
+  "Edit currently visited file as root.
+
+With a prefix ARG prompt for a file to visit.
+Will also prompt for a file to visit if current
+buffer is not visiting a file."
+  (interactive "P")
+  (if (or arg (not buffer-file-name))
+      (find-file (concat "/sudo:root@localhost:"
+                         (read-file-name "Find file(as root): ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+#+end_src
+
+#+RESULTS:
+
+** HownFunctions
+#+begin_src elisp :results output
+;; todo template
+(defun insert-todo ()
+  "insert > [today]+number"
+  (interactive)
+  (let ((today (format-time-string "%Y-%m-%d" (current-time)))
+	(number 0))
+    (insert (format "\n [%s]+%d" today number))))
+
+#+end_src
+
+#+begin_src elisp :results output
+(defun rename-this-file()
+  (interactive)
+  (let ((new-name (read-string "New name: ")))
+    (if (string= new-name "")
+	(message "No new name provided.")
+      (let ((current-file (buffer-file-name)))
+	(if current-file
+	    (progn
+	      (rename-file current-file new-name)
+	      (set-visited-file-name new-name)
+	      (set-buffer-modified-p nil))
+	  (message "This buffer is not visiting a file."))))))
+#+end_src
+
+** Toggle window split and launch nautilus
+#+begin_src elisp
+   (defun toggle-window-split ()
+     (interactive)
+     (if (= (count-windows) 2)
+	 (let* ((this-win-buffer (window-buffer))
+	    (next-win-buffer (window-buffer (next-window)))
+	    (this-win-edges (window-edges (selected-window)))
+	    (next-win-edges (window-edges (next-window)))
+	    (this-win-2nd (not (and (<= (car this-win-edges)
+			(car next-win-edges))
+			(<= (cadr this-win-edges)
+			(cadr next-win-edges)))))
+	    (splitter
+	     (if (= (car this-win-edges)
+		(car (window-edges (next-window))))
+	     'split-window-horizontally
+	   'split-window-vertically)))
+       (delete-other-windows)
+       (let ((first-win (selected-window)))
+	 (funcall splitter)
+	 (if this-win-2nd (other-window 1))
+	 (set-window-buffer (selected-window) this-win-buffer)
+	 (set-window-buffer (next-window) next-win-buffer)
+	 (select-window first-win)
+	 (if this-win-2nd (other-window 1))))))
+
+   (defun launch-nautilus ()
+     (interactive)
+     (async-shell-command "nautilus"))
+
+
+     #+end_src
+
+     #+RESULTS:
+     : launch-nautilus
+
+#+end_src
+** Function to send subtree context to gptel
+first def function to get subtree context
+#+begin_src elisp
+(setq gptel-org-branching-context t)  ; Enable hierarchical context [2][32]
+(defun org-get-subtree-content ()
+  "Return the content of the current subtree."
+  (interactive)
+  (save-excursion
+    (org-back-to-heading)
+    (let ((beg (point)))
+      (org-end-of-subtree)
+      (buffer-substring-no-properties beg (point)))))
+(defun my-function ()
+  "A brief description of my function."
+  (interactive)
+  ;; Function body goes here
+  (message "My function was called!")
+        (let ((content (org-get-subtree-content)))
+        (message content))
+  )
+
+#+end_src
+
+#+RESULTS:
+: my-function
+
+#+begin_src elisp
+(defun gptel-send-subtree ()
+        "Send the current subtree to gptel."
+        (interactive)
+        (let ((content (org-get-subtree-content)))
+        (gptel-send content)))
+
+#+end_src
+
+#+RESULTS:
+: gptel-send-subtree
+
+testing implementation of the function
+
+
+To test the implementation of the =gptel-send-subtree= function, you can follow these steps:
+
+1. *Ensure =gptel= is installed and configured*: Make sure you have =gptel= installed and properly configured in your Emacs setup.
+
+2. *Load the configuration*: If you haven't already, load your configuration file (=my_config.el=) in Emacs. You can do this by evaluating the buffer or restarting Emacs.
+
+3. *Create a test subtree*: In an Org mode buffer, create a subtree with some content. For example:
+
+4. *Call the function*: Place your cursor inside the subtree and call =gptel-send-subtree= using =M-x gptel-send-subtree=.
+
+5. *Check the output*: If everything is set up correctly, the content of the subtree should be sent to =gptel=, and you should see the response in the =gptel= buffer.
+
+If you encounter any issues, ensure that:
+- =gptel= is properly installed and configured.
+- The =org-get-subtree-content= function correctly retrieves the subtree content.
+- The =gptel-send= function is working as expected.
+
+You can also add some debugging messages to verify that the content is being retrieved and sent correctly. For example:
+#+begin_src elisp
+(defun gptel-send-subtree ()
+  "Send the current subtree to gptel."
+  (interactive)
+  (let ((content (org-get-subtree-content)))
+    (message "Sending content: %s" content)
+    (gptel-send content)))
+#+end_src
+
+#+RESULTS:
+: gptel-send-subtree
+
+This will print the content being sent to the =*Messages*= buffer, helping you debug any issues.
+
+** Dashboard File
+
+I dont know if its good idea to create a dashboard but anyways
+- Located on ~/org
+- Named dashboard.org
+[[file:~/org/dashboard.org][Dashboard]]
+** Elispy
+*** Testings
+[[file:test.org][Tests]]
+#+begin_src elisp
+#+end_src
+
+#+RESULTS:
+: Eshell Conda environment support 
+** Themes
+#+begin_src elisp
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Enable custom neotree theme (nerd-icons must be installed!)
+    (doom-themes-neotree-config)
+    ;; or for treemacs users
+    (load-theme 'doom-gruvbox)
+    (doom-themes-treemacs-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
+
+#+end_src
+
+#+RESULTS:
+: t
+
+** SSHFS
+#+begin_src elisp
+;    (shell-command "umount -l ~/tmp")
+;    (shell-command "sshfs mallku:Relaves2 ~/tmp"))
+#+end_src
+
+** Consult/vertico
+#+begin_src elisp
+(use-package vertico
+  :ensure t
+  :config
+  (vertico-mode 1))
+
+(use-package vertico-posframe
+  :ensure t
+  :config
+  (vertico-posframe-mode 1)
+  (setq vertico-posframe-parameters
+        '((left-fringe . 8)
+          (right-fringe . 8)
+          (border-width . 2))))
+
+(use-package consult
+  :ensure t
+  :bind (("C-x C-m" . consult-buffer)
+         ("C-s" . consult-line)
+         ("C-x C-f" . consult-find)))
+
+(use-package orderless
+  :ensure t
+  :config
+  (setq completion-styles '(orderless)))
+(setq vertico-posframe-poshandler #'posframe-poshandler-frame-center)
+(setq vertico-posframe-border-width 1)
+
+(setq vertico-posframe-parameters
+      '((left-fringe . 8)
+        (right-fringe . 8)
+        (border-width . 2)))
+
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode))
+
+(defun my/complete-from-list (items &optional prompt initial)
+  (interactive)
+  (let ((prompt (or prompt "Select item: ")))
+    (minibuffer-with-setup-hook
+        (lambda ()
+          (add-hook 'minibuffer-exit-hook
+                    (lambda () (kill-buffer "*Preview*"))
+                    nil t))
+      (completing-read
+       prompt
+       items
+       nil
+       t
+       initial
+       'my/complete-from-list-history
+       nil
+       (lambda (cand)
+         (with-current-buffer (get-buffer-create "*Preview*")
+           (erase-buffer)
+           (if (file-exists-p cand)
+               (insert-file-contents cand nil 0 1000)
+             (insert (format "Preview: %s" cand)))))))))
+
+
+#+end_src
+
+#+RESULTS:
+: cherry
+
+** Pythonscripts
+*** Split org files
+#+begin_src elisp
+;;EXAMPLE
+;;(setq filename (expand-file-name "~/scripts/script_call_test.py"))
+;;(message "Absolute path of script_call_test.py: %s" filename)
+;;(setq command (format "uv run %s" filename))
+;; Execute the Python script with a name argument
+;;(shell-command (format "%s" command))
+(defun py-split-org-file ()
+  "Split the current Org file into multiple org files with python script "
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (and filename (string-suffix-p ".org" filename))
+	(let ((command (format "uv run %s %s" "c:/Users/Pit/home/scripts/split_org_file.py" filename)))
+	  (message "Running command: %s" command)
+	  (shell-command command))
+      (message "Current buffer is not visiting an Org file."))))
+
+#+end_src
+
+#+RESULTS:
+: py-split-org-file
+*** Run file
+#+begin_src elisp
+(defun run-this-python-uv ()
+  "Run the current Python file in a virtual environment using uv."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (and filename (string-suffix-p ".py" filename))
+	(let ((command (format "uv run %s" filename)))
+	  (message "Running command: %s" command)
+	  (shell-command command))
+      (message "Current buffer is not visiting a Python file."))))
+
+  
+
+#+end_src
+
+#+RESULTS:
+: run-this-python-uv
+
+* Keybindigs
+#+begin_src elisp
+(global-set-key (kbd "<f1>") 'delete-other-windows)
+(global-set-key (kbd "<f3>") 'other-window)
+(global-set-key (kbd "<f12>") 'hyperbole)
+(global-set-key (kbd "<next>") 'next-buffer)
+(global-set-key (kbd "<prior>") 'previous-buffer)
+;;delete to kill buffer
+(global-set-key (kbd "<insert>") 'kill-current-buffer)
+
+
+  (meow-leader-define-key
+   '("TAB" . other-window)
+   '("b c" . copilot-mode)
+   '("b k" . kill-current-buffer)
+   '("b n" . next-buffer)
+   '("b p" . previous-buffer)
+   '("l r" . repeat-codeblock)
+   '("l a" . uv-activate)
+   '("l w" . lsp-restart-workspace)
+   '("l f" . lsp-find-definition)
+   '("l r" . lsp-find-references)
+   '("l d" . lsp-find-declaration)
+   '("l t" . load-theme)
+   '("f f" . find-file)
+   '("f b" . fzf-switch-buffer)
+   '("f r" . recentf)
+   '("f h" . consult-org-heading)
+   '("f g g" . consult-grep)
+   '("f m" . consult-imenu)
+   '("f g h" . consult-git-grep)
+   '("f p" . (lambda () (interactive) (find-file "~/cfg.org")))
+   '("f n" . (lambda () (interactive) (nov-open-directory "~/rmji") (goto-line 664)))
+   '("c v t" . org-babel-tangle)
+   '("o f" . org-insert-link)
+   '("o r" . org-repeat-src)
+   '("o l" . org-insert-src-block)
+   '("o i" . org-toggle-inline-images)
+   '("o s" . gptel-send-subtree)
+   '("o c" . howm-create)
+   '("o m" . howm-menu)
+   '("p a" . run-this-python-file-in-alacritty)
+   '("p r" . run-this-python-uv)
+   '("p s" . py-split-org-file)
+   '("r f" . recentf-open-files)
+   '("w t" . toggle-window-split)
+   '("w r" . windresize)
+   '("w d" . delete-window)
+   '("w s h" . split-window-horizontally)
+   '("w s v" . split-window-vertically)
+   '("1" . hs-toggle-hiding)
+   '("v s" . magit-stage-modified)
+   '("v c" . magit-commit)
+   '("v k" . magit-checkout)
+   '("v b" . magit-branch-and-checkout)
+   '("v p" . magit-push)
+   '("v g" . magit-pull)
+   '("v e" . magit-status)
+   '("t t" . treemacs)
+   '("t r" . treemacs-refresh)
+   '("t s" . treemacs-select-directory)
+   '("t a" . treemacs-add-project-to-workspace)
+   '("t d" . treemacs-delete-project)
+   )
+(load-theme 'doom-one)
+#+end_src 
+
+#+RESULTS:
+: t
+
+* .emacs
+ #+begin_src python :tangle no :results output
+   x= """
+   (setq package-enable-at-startup nil)
+   (defvar bootstrap-version)
+   (let ((bootstrap-file
+   (expand-file-name
+   "straight/repos/straight.el/bootstrap.el"
+   (or (bound-and-true-p straight-base-dir)
+   user-emacs-directory)))
+   (bootstrap-version 7))
+   (unless (file-exists-p bootstrap-file)
+   (with-current-buffer
+   (url-retrieve-synchronously
+   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+   'silent 'inhibit-cookies)
+   (goto-char (point-max))
+   (eval-print-last-sexp)))
+   (load bootstrap-file nil 'nomessage))
+
+   (straight-use-package 'use-package)
+   (setq straight-use-package-by-default t)
+   (setq use-package-always-ensure t)
+
+
+   (org-babel-load-file (expand-file-name "~/Casa/.config/cfg.org"))
+      """
+   import os
+   home_path = os.path.expanduser("~")
+   #write x as file > ~/.emacs
+
+   
+ #+end_src
+ 
+
+ 
+ 
