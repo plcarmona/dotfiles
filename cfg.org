@@ -293,9 +293,6 @@
 
 #+end_src
 
-#+RESULTS:
-: #s(gptel-openai "xAI" "api.x.ai" #<subr F616e6f6e796d6f75732d6c616d626461_anonymous_lambda_18> "https" t "/v1/chat/completions" "xai-EqY7BVHPknPAQc1uMUqgKNpiFOEMOSJAw6KMNQYvE7jFoQhLAJYEQLwXpp26DmZXZOHBIVfFUOxwKWg9" (grok-3-mini-beta) "https://api.x.ai/v1/chat/completions" nil nil)
-
 ** Meow
 #+begin_src elisp
 (defun meow-setup ()
