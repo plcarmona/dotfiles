@@ -89,7 +89,6 @@
 ;; set font ubuntu mono nerd
 (set-face-attribute 'default-frame-alist '(font "UbuntuMono Nerd Font Mono"))
 (set-fontset-font t 'symbol (font-spec :family "Segoe UI Emoji") nil 'prepend)
-(add-to-list 'exec-path "C:/Program Files/Git/usr/bin")
 #+end_src
 
 #+RESULTS:
@@ -264,34 +263,6 @@
 #+end_src
 
 #+RESULTS:
-: C:/Program Files/7-Zip/7z.exe
-
-** Gptel
-#+begin_src elisp
-
-(setq gptel-api-key (getenv "DEEPSEEK_API_KEY")) ; Or set it directly as a string
-;; Configure the backend for DeepSeek
-;; OPTIONAL configuration
-(setq gptel-model   'deepseek-chat
-	gptel-backend
-	(gptel-make-openai "DeepSeek"     ;Any name you want
-	  :host "api.deepseek.com"
-	  :endpoint "/chat/completions"
-	  :stream t
-	  :key gptel-api-key ;be a function that returns the key
-	  :models '(deepseek-chat deepseek-coder)))
-
-(setq gptel-api-key (getenv "GROK_API_KEY")) ; Or set it directly as a string
-;; xAI offers an OpenAI compatible API
-(gptel-make-openai "xAI"           ;Any name you want
-:host "api.x.ai"
-:key gptel-api-key              ;can be a function that returns the key
-:endpoint "/v1/chat/completions"
-:stream t
-:models '(;; xAI now only offers `grok-beta` as of the time of this writing
-	    grok-3-mini-beta))
-
-#+end_src
 
 ** Meow
 #+begin_src elisp
@@ -474,33 +445,7 @@
 
 #+RESULTS:
 : t
-** Uv
-#+begin_src elisp
 
-(defun uv-activate ()
-  "send command to activate virtual environment."
-  (interactive)
-  (let ((default-directory "C:\\Users\\Pit\\.venv\\Scripts\\"))
-    (shell-command "activate.bat")))
-;; set default python interpreter
-(setq python-shell-interpreter "C:\\Users\\Pit\\.venv\\Scripts\\python.exe")
-  (setq lsp-pyright-python-executable-cmd "C://Users//Pit//.venv//Scripts//python.exe")
-(uv-activate)
-
-;; lsp configuration
-(use-package lsp-mode
-  :ensure t
-  :hook (python-mode . lsp)
-  :config
-  (setq lsp-pyright-venv-path "C:\\Users\\Pit\\.venv")
-  (setq lsp-pyright-venv "C:\\Users\\Pit\\.venv"))
-;;org configuration
-
-(setq org-babel-python-command "C:\\Users\\Pit\\.venv\\Scripts\\python.exe")
-
-#+end_src
-#+RESULTS:
-: C:\Users\Pit\.venv\Scripts\python.exe
 ** Company
  #+begin_src elisp
    (use-package company
@@ -536,37 +481,6 @@
  #+end_src 
 
  #+RESULTS:
-** Obsidian
-#+begin_src elisp  
-
-(use-package obsidian
-  :config
-  (global-obsidian-mode t)
-  (obsidian-backlinks-mode t)
-  :custom
-  ;; location of obsidian vault
-  (obsidian-directory "~/Notes")
-  ;; Default location for new notes from `obsidian-capture'
-  (obsidian-inbox-directory "Inbox")
-  ;; Useful if you're going to be using wiki links
-  (markdown-enable-wiki-links t)
-  ;; These bindings are only suggestions; it's okay to use other bindings
-  :bind (:map obsidian-mode-map
-              ;; Create note
-              ("C-c C-n" . obsidian-capture)
-              ;; If you prefer you can use `obsidian-insert-wikilink'
-              ("C-c C-l" . obsidian-insert-link)
-              ;; Open file pointed to by link at point
-              ("C-c C-o" . obsidian-follow-link-at-point)
-              ;; Open a different note from vault
-              ("C-c C-p" . obsidian-jump)
-              ;; Follow a backlink for the current file
-              ("C-c C-b" . obsidian-backlink-jump)))
-
-
-#+end_src
-
-#+RESULTS:
 *** 
 * Custom Funcs
 ** Repeat source block
@@ -610,33 +524,6 @@ buffer is not visiting a file."
 #+end_src
 
 #+RESULTS:
-
-** HownFunctions
-#+begin_src elisp :results output
-;; todo template
-(defun insert-todo ()
-  "insert > [today]+number"
-  (interactive)
-  (let ((today (format-time-string "%Y-%m-%d" (current-time)))
-	(number 0))
-    (insert (format "\n [%s]+%d" today number))))
-
-#+end_src
-
-#+begin_src elisp :results output
-(defun rename-this-file()
-  (interactive)
-  (let ((new-name (read-string "New name: ")))
-    (if (string= new-name "")
-	(message "No new name provided.")
-      (let ((current-file (buffer-file-name)))
-	(if current-file
-	    (progn
-	      (rename-file current-file new-name)
-	      (set-visited-file-name new-name)
-	      (set-buffer-modified-p nil))
-	  (message "This buffer is not visiting a file."))))))
-#+end_src
 
 ** Toggle window split and launch nautilus
 #+begin_src elisp
@@ -861,57 +748,18 @@ I dont know if its good idea to create a dashboard but anyways
 #+RESULTS:
 : cherry
 
-** Pythonscripts
-*** Split org files
-#+begin_src elisp
-;;EXAMPLE
-;;(setq filename (expand-file-name "~/scripts/script_call_test.py"))
-;;(message "Absolute path of script_call_test.py: %s" filename)
-;;(setq command (format "uv run %s" filename))
-;; Execute the Python script with a name argument
-;;(shell-command (format "%s" command))
-(defun py-split-org-file ()
-  "Split the current Org file into multiple org files with python script "
-  (interactive)
-  (let ((filename (buffer-file-name)))
-    (if (and filename (string-suffix-p ".org" filename))
-	(let ((command (format "uv run %s %s" "c:/Users/Pit/home/scripts/split_org_file.py" filename)))
-	  (message "Running command: %s" command)
-	  (shell-command command))
-      (message "Current buffer is not visiting an Org file."))))
-
-#+end_src
-
-#+RESULTS:
-: py-split-org-file
-*** Run file
-#+begin_src elisp
-(defun run-this-python-uv ()
-  "Run the current Python file in a virtual environment using uv."
-  (interactive)
-  (let ((filename (buffer-file-name)))
-    (if (and filename (string-suffix-p ".py" filename))
-	(let ((command (format "uv run %s" filename)))
-	  (message "Running command: %s" command)
-	  (shell-command command))
-      (message "Current buffer is not visiting a Python file."))))
-
-  
-
-#+end_src
-
-#+RESULTS:
-: run-this-python-uv
-
 * Keybindigs
 #+begin_src elisp
-(global-set-key (kbd "<f1>") 'delete-other-windows)
-(global-set-key (kbd "<f3>") 'other-window)
+(global-set-key (kbd "<f1>") 'other-window)
+(global-set-key (kbd "<f3>") 'delete-other-windows)
+(global-set-key (kbd "<f4>") 'split-window-horizontally)
+(global-set-key (kbd "<f5>") 'split-window-vertically)
+(global-set-key (kbd "<f9>") 'consult-buffer)
+(global-set-key (kbd "<f10>") 'consult-grep)
+(global-set-key (kbd "<f11>") 'kill-current-buffer)
 (global-set-key (kbd "<f12>") 'hyperbole)
 (global-set-key (kbd "<next>") 'next-buffer)
 (global-set-key (kbd "<prior>") 'previous-buffer)
-;;delete to kill buffer
-(global-set-key (kbd "<insert>") 'kill-current-buffer)
 
 
   (meow-leader-define-key
