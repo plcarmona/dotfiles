@@ -48,6 +48,10 @@
 ;; Treemacs
 (use-package treemacs)
 
+;; Treemacs icons
+(use-package treemacs-all-the-icons)
+(treemacs-load-theme "all-the-icons")
+
 ;; Superstar mode
 (use-package org-superstar
   :straight (:host github :repo "integral-dw/org-superstar-mode")
@@ -151,72 +155,78 @@
 ;; 1. Make <f12> a prefix key
 ;; This define a set of keys of system functionalities related to file and buffer management
 ;; -------------------------------------------------
-(define-prefix-command 'my/f12-map)        ; create the map
-(global-set-key (kbd "<f12>") 'my/f12-map) ; bind F12 to it
-(define-key my/f12-map (kbd "<f12>") 'save-buffer)   ; F12 F12
-(define-key my/f12-map (kbd "<f11>") 'find-file)     ; F12 F11
-(define-key my/f12-map (kbd "b") 'switch-to-buffer)  ; F12 b → switch buffer
-(define-key my/f12-map (kbd "q") 'kill-this-buffer)      ; F12 q → close frame
-(define-key my/f12-map (kbd "g") 'consult-grep)        ; F12 g → grep
-(define-key my/f12-map (kbd "k") 'consult-kmacro)	   ; F12 k → consult-macro
-(define-key my/f12-map (kbd "r") 'consult-recent-file) ; F12 r → recent files
+(define-prefix-command 'my/utils-map)        ; create the map
+(global-set-key (kbd "<f12>") 'my/utils-map) ; bind F12 to it
+(define-key my/utils-map (kbd "<f12>") 'save-buffer)   ; F12 F12
+(define-key my/utils-map (kbd "<f11>") 'find-file)     ; F12 F11
+(define-key my/utils-map (kbd "b") 'switch-to-buffer)  ; F12 b → switch buffer
+(define-key my/utils-map (kbd "q") 'kill-current-buffer)      ; F12 q → close frame
+(define-key my/utils-map (kbd "g") 'consult-grep)        ; F12 g → grep
+(define-key my/utils-map (kbd "k") 'consult-kmacro)	   ; F12 k → consult-macro
+(define-key my/utils-map (kbd "r") 'consult-recent-file) ; F12 r → recent files
 
 ;; -------------------------------------------------
 ;; 2. Make <f11> a prefix key
 ;; This define a set of keys of git functionalities
 ;; -------------------------------------------------
-(define-prefix-command 'my/f11-map)        ; create the map
-(global-set-key (kbd "<f11>") 'my/f11-map) ; bind F
-(define-key my/f11-map (kbd "<f12>") 'magit-status) ; F11 F12
-(define-key my/f11-map (kbd "b") 'magit-blame)
-(define-key my/f11-map (kbd "c") 'magit-commit)
-(define-key my/f11-map (kbd "p") 'magit-pull)
-(define-key my/f11-map (kbd "P") 'magit-push)
-(define-key my/f11-map (kbd "s") 'magit-stage-file)
-(define-key my/f11-map (kbd "u") 'magit-unstage-file)
-(define-key my/f11-map (kbd "l") 'magit-log)
-(define-key my/f11-map (kbd "f") 'magit-fetch)
-(define-key my/f11-map (kbd "d") 'magit-diff)
-(define-key my/f11-map (kbd "o") 'magit-checkout)
-(define-key my/f11-map (kbd "r") 'magit-rebase)
-(define-key my/f11-map (kbd "a") 'magit-branch)
-(define-key my/f11-map (kbd "A") 'magit-stage-modified)
+(define-prefix-command 'my/f11-map)
+(global-set-key (kbd "<f11>") 'my/git-map) 
+(define-key my/git-map (kbd "<f12>") 'magit-status) 
+(define-key my/git-map (kbd "b") 'magit-blame)
+(define-key my/git-map (kbd "c") 'magit-commit)
+(define-key my/git-map (kbd "p") 'magit-pull)
+(define-key my/git-map (kbd "P") 'magit-push)
+(define-key my/git-map (kbd "s") 'magit-stage-file)
+(define-key my/git-map (kbd "u") 'magit-unstage-file)
+(define-key my/git-map (kbd "l") 'magit-log)
+(define-key my/git-map (kbd "f") 'magit-fetch)
+(define-key my/git-map (kbd "d") 'magit-diff)
+(define-key my/git-map (kbd "o") 'magit-checkout)
+(define-key my/git-map (kbd "r") 'magit-rebase)
+(define-key my/git-map (kbd "a") 'magit-branch)
+(define-key my/git-map (kbd "A") 'magit-stage-modified)
 
 ;; -------------------------------------------------
 ;; 3. Make <f9> a prefix key
 ;; This define a set of keys of treemacs functionalities
 ;; -------------------------------------------------
-(define-prefix-command 'my/f9-map)        ; create the map
-(global-set-key (kbd "<f9>") 'my/f9-map) ; bind F
-(define-key my/f10-map (kbd "<f9>") 'treemacs)
-(define-key my/f10-map (kbd "w") 'treemacs-create-workspace)
-(define-key my/f10-map (kbd "a") 'treemacs-add-project-to-workspace)
-(define-key my/f10-map (kbd "s") 'treemacs-switch-workspace)
-(define-key my/f10-map (kbd "d") 'treemacs-remove-project-from-workspace)
-
+(define-prefix-command 'my/tremacs-map)        ; create the map
+(global-set-key (kbd "<f9>") 'my/tremacs-map) ; bind F
+(define-key my/tremacs-map (kbd "<f9>") 'treemacs)
+(define-key my/tremacs-map (kbd "w") 'treemacs-create-workspace)
+(define-key my/tremacs-map (kbd "a") 'treemacs-add-project-to-workspace)
+(define-key my/tremacs-map (kbd "s") 'treemacs-switch-workspace)
+(define-key my/tremacs-map (kbd "d") 'treemacs-remove-project-from-workspace)
+(define-key my/tremacs-map (kbd "c") '(lambda () (interactive) (find-file "~/.emacs")))
 ;; -------------------------------------------------
 
 ;; 4. Make <f10> a prefix key
 ;; This define a set of keys of windows management functionalities
+;; esta esquisito 
 ;; -------------------------------------------------
-(define-prefix-command 'my/f10-map)        ; create the map
-(global-set-key (kbd "<f10>") 'my/f10-map) ; bind F
-(define-key my/f10-map (kbd "h") 'split-window-below)
-(define-key my/f10-map (kbd "v") 'split-window-right)
-(define-key my/f10-map (kbd "<f9>") 'windmove-left)
-(define-key my/f10-map (kbd "<f11>") 'windmove-right)
-(define-key my/f10-map (kbd "<f10>") 'windmove-down) 
-(define-key my/f10-map (kbd "S-<f10>") 'windmove-up)
-(define-key my/f10-map (kbd "d") 'delete-other-windows)
-(define-key my/f10-map (kbd "h") 'next-window-any-frame)
-(define-key my/f10-map (kbd "l") 'previous-window-any-frame)
-(define-key my/f10-map (kbd "f") 'toggle-frame-fullscreen)
+(define-prefix-command 'my/win-map)        
+(global-set-key (kbd "<f8>") 'my/win-map) 
+(define-key my/win-map (kbd "z") 'split-window-below)
+(define-key my/win-map (kbd "v") 'split-window-right)
+(define-key my/win-map (kbd "h") 'windmove-left)
+(define-key my/win-map (kbd "l") 'windmove-right)
+(define-key my/win-map (kbd "k") 'windmove-down) 
+(define-key my/win-map (kbd "j") 'windmove-up)
+(define-key my/win-map (kbd "d") 'delete-other-windows)
+(define-key my/win-map (kbd "n") 'next-window-any-frame)
+(define-key my/win-map (kbd "p") 'previous-window-any-frame)
+(define-key my/win-map (kbd "f") 'toggle-frame-fullscreen)
+(define-key my/win-map (kbd "<f9>") 'previous-buffer)
+(define-key my/win-map (kbd "<win>") 'other-window)
+(define-key my/win-map (kbd "<f11>") 'next-buffer)
 
 ;; -------------------------------------------------
 ;; 5. Make <f5> a prefix key
-;; This define a set of keys of org-mode functionalities
+;; This define a set of keys of miscellaneous things
 ;; -------------------------------------------------
-(define-prefix-command 'my/f5-map)        ; create the map
-(global-set-key (kbd "<f5>") 'my/f5-map) ; bind F
-(define-key my/f5-map (kbd "<t>") 'org-todo)
-(define-key my/f5-map (kbd "<l>") 'org-onsert-link)
+(define-prefix-command 'my/misc-map)
+(global-set-key (kbd "<f5>") 'my/misc-map) 
+(define-key my/misc-map (kbd "t") 'org-todo)
+(define-key my/misc-map (kbd "l") 'org-onsert-link)
+(define-key my/misc-map (kbd "c") 'copilot-mode)
+(define-key my/misc-map (kbd "s") 'async-shell-command)
