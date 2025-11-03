@@ -1,0 +1,130 @@
+* General
+#+begin_src emacs-lisp
+;; -------------------------------------------------
+;; 1. Make <f12> a prefix key
+;; This define a set of keys of system functionalities related to file and buffer management
+;; -------------------------------------------------
+(define-prefix-command 'my/utils-map)        ; create the map
+(global-set-key (kbd "<f12>") 'my/utils-map) ; bind F12 to it
+(define-key my/utils-map (kbd "<f12>") 'save-buffer)   ; F12 F12
+(define-key my/utils-map (kbd "<f11>") 'find-file)     ; F12 F11
+(define-key my/utils-map (kbd "b") 'switch-to-buffer)  ; F12 b → switch buffer
+(define-key my/utils-map (kbd "q") 'kill-current-buffer)      ; F12 q → close frame
+(define-key my/utils-map (kbd "g") 'consult-grep)        ; F12 g → grep
+(define-key my/utils-map (kbd "k") 'consult-kmacro)	   ; F12 k → consult-macro
+(define-key my/utils-map (kbd "r") 'consult-recent-file) ; F12 r → recent files
+(define-key my/utils-map (kbd "c") '(lambda () (interactive) (find-file "~/.emacs")))
+
+#+end_src
+* Git
+#+begin_src emacs-lisp
+;; -------------------------------------------------
+;; 2. Make <f11> a prefix key
+;; This define a set of keys of git functionalities
+;; -------------------------------------------------
+(define-prefix-command 'my/git-map)
+(global-set-key (kbd "<f11>") 'my/git-map) 
+(define-key my/git-map (kbd "<f12>") 'magit-status) 
+(define-key my/git-map (kbd "b") 'magit-blame)
+(define-key my/git-map (kbd "c") 'magit-commit)
+(define-key my/git-map (kbd "p") 'magit-pull)
+(define-key my/git-map (kbd "P") 'magit-push)
+(define-key my/git-map (kbd "s") 'magit-stage-file)
+(define-key my/git-map (kbd "u") 'magit-unstage-file)
+(define-key my/git-map (kbd "l") 'magit-log)
+(define-key my/git-map (kbd "f") 'magit-fetch)
+(define-key my/git-map (kbd "d") 'magit-diff)
+(define-key my/git-map (kbd "o") 'magit-checkout)
+(define-key my/git-map (kbd "r") 'magit-rebase)
+(define-key my/git-map (kbd "a") 'magit-branch)
+(define-key my/git-map (kbd "A") 'magit-stage-modified)
+#+end_src
+
+* Treemacs
+
+#+begin_src emacs-lisp
+;; -------------------------------------------------
+;; 3. Make <f9> a prefix key
+;; This define a set of keys of treemacs functionalities
+;; -------------------------------------------------
+(define-prefix-command 'my/tremacs-map)        ; create the map
+(global-set-key (kbd "<f9>") 'my/tremacs-map) ; bind F
+(define-key my/tremacs-map (kbd "<f9>") 'treemacs)
+(define-key my/tremacs-map (kbd "w") 'treemacs-create-workspace)
+(define-key my/tremacs-map (kbd "a") 'treemacs-add-project-to-workspace)
+(define-key my/tremacs-map (kbd "s") 'treemacs-switch-workspace)
+(define-key my/tremacs-map (kbd "d") 'treemacs-remove-project-from-workspace)
+#+end_src
+
+* Window Management
+
+#+begin_src emacs-lisp
+;; 4. Make <f10> a prefix key
+;; This define a set of keys of windows management functionalities
+;; esta esquisito 
+;; -------------------------------------------------
+(define-prefix-command 'my/win-map)        
+(global-set-key (kbd "<f8>") 'my/win-map) 
+(define-key my/win-map (kbd "z") 'split-window-below)
+(define-key my/win-map (kbd "v") 'split-window-right)
+(define-key my/win-map (kbd "h") 'windmove-left)
+(define-key my/win-map (kbd "l") 'windmove-right)
+(define-key my/win-map (kbd "k") 'windmove-down) 
+(define-key my/win-map (kbd "j") 'windmove-up)
+(define-key my/win-map (kbd "d") 'delete-other-windows)
+(define-key my/win-map (kbd "n") 'next-window-any-frame)
+(define-key my/win-map (kbd "p") 'previous-window-any-frame)
+(define-key my/win-map (kbd "f") 'toggle-frame-fullscreen)
+(define-key my/win-map (kbd "<f6>") 'previous-buffer)
+(define-key my/win-map (kbd "<f8>") 'other-window)
+(define-key my/win-map (kbd "<f7>") 'next-buffer)
+#+end_src
+
+* Org Mode + Copilot + Shell
+
+#+begin_src emacs-lisp
+;; -------------------------------------------------
+;; 5. Make <f5> a prefix key
+;; This define a set of keys of miscellaneous things
+;; -------------------------------------------------
+(define-prefix-command 'my/misc-map)
+(global-set-key (kbd "<f5>") 'my/misc-map) 
+(define-key my/misc-map (kbd "t") 'org-todo)
+(define-key my/misc-map (kbd "l") 'org-onsert-link)
+(define-key my/misc-map (kbd "c") 'copilot-mode)
+(define-key my/misc-map (kbd "s") 'async-shell-command)
+#+end_src
+
+* C-c shortcuts
+#+begin_src emacs-lisp
+  ;; Keybindings
+  (global-set-key (kbd "C-<f1>") 'repeat)
+  ;; Kill-current-buffer C-c k
+  (global-set-key (kbd "C-c k") 'kill-current-buffer)
+  ;; Comment or uncomment region C-c c
+  (global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
+
+  ;; Next window C-c right
+  (global-set-key (kbd "C-c C-<right>") 'windmove-right)
+  ;; Previous window C-c left
+  (global-set-key (kbd "C-c C-<left>") 'windmove-left)
+  ;; Up window C-c up
+  (global-set-key (kbd "C-c C-<up>") 'windmove-up)
+  ;; Down window C-c down
+  (global-set-key (kbd "C-c C-<down>") 'windmove-down)
+
+  ;; Split window vertically C-c s v
+  (global-set-key (kbd "C-c s v") 'split-window-right)
+  ;; Split window horizontally C-c s h
+  (global-set-key (kbd "C-c s h") 'split-window-below)
+
+  ;; Copilot accept C-c a
+  (global-set-key (kbd "C-c a") 'copilot-accept-completion)
+
+  
+#+end_src
+
+#+RESULTS:
+: copilot-accept-completion
+
+
