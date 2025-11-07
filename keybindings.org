@@ -40,8 +40,8 @@
 (define-key my/git-map (kbd "A") 'magit-stage-modified)
 #+end_src
 
-* Treemacs
-
+ * Treemacs
+   
 #+begin_src emacs-lisp
 ;; -------------------------------------------------
 ;; 3. Make <f9> a prefix key
@@ -81,7 +81,6 @@
 #+end_src
 
 * Org Mode + Copilot + Shell
-
 #+begin_src emacs-lisp
 ;; -------------------------------------------------
 ;; 5. Make <f5> a prefix key
