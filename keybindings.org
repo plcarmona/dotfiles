@@ -86,13 +86,15 @@
   (global-set-key (kbd "C-c C-<up>") 'windmove-up)
   ;; Down window C-c down
   (global-set-key (kbd "C-c C-<down>") 'windmove-down)
-
-
+  ;; find file
+  (global-set-key (kbd "C-c f") 'find-file)
+  ;; recentf
+  (global-set-key (kbd "C-c F") 'recentf)
 
 #+end_src
 
 #+RESULTS:
-: copilot-accept-completion
+: find-file
 * OrgRoam
 #+begin_src elisp
 

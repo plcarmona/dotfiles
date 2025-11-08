@@ -20,9 +20,13 @@
 (straight-use-package 'use-package)
 ;; load org
 (straight-use-package 'org)
-;; -------------------------------------------------
-;; -------------------------------------------------
+(straight-use-package 'hyperbole)
+;;hyperbole setup
 
+(hyperbole-mode 1)
+
+;; -------------------------------------------------
+;; -------------------------------------------------
 (org-babel-load-file
  (expand-file-name "dotfiles/packages.org"
 		   user-emacs-directory))
@@ -34,4 +38,3 @@
 (org-babel-load-file
  (expand-file-name "dotfiles/custom.org"
 		   user-emacs-directory))
-

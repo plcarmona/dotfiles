@@ -23,10 +23,10 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
     (use-package doom-themes)
     (load-theme 'doom-plain-dark t)
 
-    ;; Treemacs
+    ;; ;; Treemacs
     (use-package treemacs)
 
-    ;; Treemacs icons
+    ;; ;; Treemacs icons
     (use-package treemacs-all-the-icons)
     (treemacs-load-theme "all-the-icons")
 
@@ -52,8 +52,12 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
          ("###" . "▫")  ; Level 3
          ("####" . "⁃") ; Level 4
          ("*" . "•")    ; Bullet list
-         ("+" . "◦")    ; Alternative bullet
-         ("-" . "–")))) ; Dash list
+         ("+" . "◦")    ; Alternative
+         ("-" . "–")
+         ("=>". "⇒")
+         ("<=" . "⇐")
+         ("lambda" . "λ")
+         ("->" . "→"))))
 
     ;; Enable src block execution in markdown
     (use-package md-babel
@@ -72,6 +76,10 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
     ;; Enable spell checking in org-mode
     (add-hook 'org-mode-hook 'flyspell-mode)
 #+end_src
+
+#+RESULTS:
+| flyspell-mode | #[nil ((org-superstar-mode 1)) nil] | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+
 * Minibuffer
 #+begin_src elisp
   ;; Consult/Vertico and styling setup
@@ -146,8 +154,7 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
      (global-display-line-numbers-mode)
 
      ;; Set Font to MonaspaceNeonNF-Regular
-     (set-face-attribute 'default nil :family "'Monaspace Neon',monospace" :weight 'light :height 150)
-
+     (set-face-attribute 'default nil :height 180 :weight 'normal :family "MonaspaceNeonNF-Regular")
      ;; hide tool-bar and menu-bar
      (tool-bar-mode -1)
      (menu-bar-mode -1)
@@ -172,5 +179,54 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
 
 #+end_src
 
+#+RESULTS:
+: ignore
 
+* LSP Python
+
+#+begin_src elisp
+;; ------------------------------------------------------------
+;; 1. LSP Mode for Intelligence (pyright)
+;; ------------------------------------------------------------
+(use-package lsp-mode
+  :commands lsp lsp-deferred
+  :hook (python-mode . lsp-deferred) ; Start pyright automatically for Python
+  :config
+  (setq lsp-diagnostics-provider :flymake)
+  ;; Optional: Reduce noise
+  (setq lsp-auto-guess-root nil)
+  (setq lsp-log-io nil)
+  )
+
+;; Use pyright as the LSP server for Python
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          ;; Optional: Disable pyright's formatting if you want ruff to handle it
+                          (setq-local lsp-pyright-disable-diagnostics t) ; Let ruff handle diagnostics
+                          (setq-local lsp-pyright-disable-organize-imports t) ; Let ruff handle imports
+                          ))
+  :config
+  ;; Use ruff for diagnostics instead of pyright
+  (lsp-register-custom-settings
+   '(("pyright.disableDiagnostics" t t)))
+  )
+
+;; ------------------------------------------------------------
+;; 2. Company for Autocompletion (provided by pyright)
+;; ------------------------------------------------------------
+(use-package company
+  :ensure t
+  :hook (lsp-mode . company-mode)
+  :config
+  (setq company-minimum-prefix-length 1)
+  (setq company-tooltip-align-annotations t)
+  )
+
+
+#+end_src
+
+#+RESULTS:
+| company-mode |
 
