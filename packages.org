@@ -162,8 +162,8 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
   ;; scratch as initial buffer
   (setq initial-buffer-choice t)
 
-  ;; Set norg directory
-  (setq default-directory "/Users/sofia/")
+  ;; Set def directory
+  (setq default-directory "~/")
 
   ;; Enable shift selection in org-mode
   (setq org-support-shift-select t)
