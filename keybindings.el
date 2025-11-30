@@ -1,0 +1,123 @@
+;; -------------------------------------------------
+(define-prefix-command 'Aux)
+(global-set-key (kbd "C-c z") 'Aux)
+(define-key Aux (kbd "c") '(lambda () (interactive) (find-file "~/.emacs.d/dotfiles/.emacs")))
+
+;; -------------------------------------------------
+(define-prefix-command 'my/git-map)
+(global-set-key (kbd "<f6>") 'my/git-map) 
+(define-key my/git-map (kbd "S") 'magit-status) 
+(define-key my/git-map (kbd "b") 'magit-blame)
+(define-key my/git-map (kbd "c") 'magit-commit)
+(define-key my/git-map (kbd "p") 'magit-pull)
+(define-key my/git-map (kbd "P") 'magit-push)
+(define-key my/git-map (kbd "s") 'magit-stage-file)
+(define-key my/git-map (kbd "u") 'magit-unstage-file)
+(define-key my/git-map (kbd "l") 'magit-log)
+(define-key my/git-map (kbd "f") 'magit-fetch)
+(define-key my/git-map (kbd "d") 'magit-diff)
+(define-key my/git-map (kbd "o") 'magit-checkout)
+(define-key my/git-map (kbd "r") 'magit-rebase)
+(define-key my/git-map (kbd "a") 'magit-branch)
+(define-key my/git-map (kbd "m") 'magit-stage-modified)
+
+;; -------------------------------------------------
+;; 3. Make <f9> a prefix key
+;; This define a set of keys of treemacs functionalities
+;; -------------------------------------------------
+(define-prefix-command 'my/tremacs-map)        ; create the map
+(global-set-key (kbd "C-c t") 'my/tremacs-map) ; bind F
+(define-key my/tremacs-map (kbd "t") 'treemacs)
+(define-key my/tremacs-map (kbd "w") 'treemacs-create-workspace)
+(define-key my/tremacs-map (kbd "a") 'treemacs-add-project-to-workspace)
+(define-key my/tremacs-map (kbd "s") 'treemacs-switch-workspace)
+(define-key my/tremacs-map (kbd "d") 'treemacs-remove-project-from-workspace)
+
+(define-key Aux (kbd "<left>") 'next-window-any-frame)
+(define-key Aux (kbd "<right>") 'previous-window-any-frame)
+(define-key Aux (kbd "f") 'toggle-frame-fullscreen)
+
+;; -------------------------------------------------
+;;
+(global-set-key (kbd "<f5>") 'copilot-mode)
+(global-set-key (kbd "C-<f5>") 'async-shell-command)
+
+;; Keybindings
+(global-set-key (kbd "<f1>") 'repeat)
+;; Kill-current-buffer C-c k
+(global-set-key (kbd "C-c k") 'kill-current-buffer)
+;; Comment or uncomment region C-c c
+(global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
+
+;; Next window C-c right
+(global-set-key (kbd "C-c C-<right>") 'windmove-right)
+;; Previous window C-c left
+(global-set-key (kbd "C-c C-<left>") 'windmove-left)
+;; Up window C-c up
+(global-set-key (kbd "C-c C-<up>") 'windmove-up)
+;; Down window C-c down
+(global-set-key (kbd "C-c C-<down>") 'windmove-down)
+;; find file
+(global-set-key (kbd "C-c f") 'find-file)
+;; recentf
+(global-set-key (kbd "<f9>") 'recentf)
+;; lsp - keys
+(global-set-key (kbd "C-c l r") 'lsp-rename)
+(global-set-key (kbd "C-c l g d") 'lsp-find-definition)
+(global-set-key (kbd "C-c l g r") 'lsp-find-references)
+(global-set-key (kbd "C-c l g i") 'lsp-find-implementation)
+
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/notes/"))
+  :config
+  (org-roam-db-autosync-mode)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+		 ("C-c n f" . org-roam-node-find)
+		 ("C-c n i" . org-roam-node-insert)
+		 ("C-c n c" . org-roam-capture)
+		 ;; Dailies
+		 ("C-c n j" . org-roam-dailies-capture-today))
+  )
+
+(use-package consult-org-roam
+   :ensure t
+   :after org-roam
+   :init
+   (require 'consult-org-roam)
+   ;; Activate the minor mode
+   (consult-org-roam-mode 1)
+   :custom
+   ;; Use `ripgrep' for searching with `consult-org-roam-search'
+   (consult-org-roam-grep-func #'consult-ripgrep)
+   ;; Configure a custom narrow key for `consult-buffer'
+   (consult-org-roam-buffer-narrow-key ?r)
+   ;; Display org-roam buffers right after non-org-roam buffers
+   ;; in consult-buffer (and not down at the bottom)
+   (consult-org-roam-buffer-after-buffers t)
+   :config
+   ;; Eventually suppress previewing for certain functions
+   (consult-customize
+    consult-org-roam-forward-links
+    :preview-key "M-.")
+   :bind
+   ;; Define some convenient keybindings as an addition
+   ("C-c n e" . consult-org-roam-file-find)
+   ("C-c n b" . consult-org-roam-backlinks)
+   ("C-c n B" . consult-org-roam-backlinks-recursive)
+   ("C-c n l" . consult-org-roam-forward-links)
+   ("C-c n r" . consult-org-roam-search)
+   ("C-c n t" . org-roam-dailies-goto-today)
+   ("C-c n y" . org-roam-dailies-goto-yesterday))
+
+(global-set-key (kbd "M-<f4>") 'kill-current-buffer)
+
+;;wt -d "C:\Path\To\Your\Directory"
+;; path of wt C:\Users\sofia\Downloads\Microsoft.WindowsTerminal_1.23.12811.0_x64\terminal-1.23.12811.0\wt.exe
+(defun spawn-terminal-at-current-dir ()
+  "Open Windows Terminal at the current directory."
+  (interactive)
+  (let ((current-dir (expand-file-name default-directory)))
+	(start-process "spawn-terminal" nil "C:\\Users\\sofia\\Downloads\\Microsoft.WindowsTerminal_1.23.12811.0_x64\\terminal-1.23.12811.0\\wt.exe" "-d" current-dir)))
+(global-set-key (kbd "C-c t") 'spawn-terminal-at-current-dir)

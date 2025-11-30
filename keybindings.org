@@ -4,6 +4,7 @@
   (define-prefix-command 'Aux)
   (global-set-key (kbd "C-c z") 'Aux)
   (define-key Aux (kbd "c") '(lambda () (interactive) (find-file "~/.emacs.d/dotfiles/.emacs")))
+
 #+end_src
 
 #+RESULTS:
@@ -90,11 +91,17 @@
   (global-set-key (kbd "C-c f") 'find-file)
   ;; recentf
   (global-set-key (kbd "<f9>") 'recentf)
+  ;; lsp - keys
+  (global-set-key (kbd "C-c l r") 'lsp-rename)
+  (global-set-key (kbd "C-c l g d") 'lsp-find-definition)
+  (global-set-key (kbd "C-c l g r") 'lsp-find-references)
+  (global-set-key (kbd "C-c l g i") 'lsp-find-implementation)
+
 
 #+end_src
 
 #+RESULTS:
-: recentf
+: lsp-find-implementation
 * OrgRoam
 #+begin_src elisp
 
@@ -145,4 +152,24 @@
 
 #+RESULTS:
 : org-roam-dailies-goto-yesterday
-  
+* KillBuffer
+#+begin_src emacs-lisp
+(global-set-key (kbd "M-<f4>") 'kill-current-buffer)
+#+end_src
+
+#+RESULTS:
+: kill-current-buffer
+* SpawnAterminal at dir
+#+begin_src emacs-lisp
+  ;;wt -d "C:\Path\To\Your\Directory"
+  ;; path of wt C:\Users\sofia\Downloads\Microsoft.WindowsTerminal_1.23.12811.0_x64\terminal-1.23.12811.0\wt.exe
+  (defun spawn-terminal-at-current-dir ()
+    "Open Windows Terminal at the current directory."
+    (interactive)
+    (let ((current-dir (expand-file-name default-directory)))
+  	(start-process "spawn-terminal" nil "C:\\Users\\sofia\\Downloads\\Microsoft.WindowsTerminal_1.23.12811.0_x64\\terminal-1.23.12811.0\\wt.exe" "-d" current-dir)))
+  (global-set-key (kbd "C-c t") 'spawn-terminal-at-current-dir)
+#+end_src
+
+#+RESULTS:
+: spawn-terminal-at-current-dir

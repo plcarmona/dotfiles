@@ -1,0 +1,14 @@
+(defun org-duplicate-last-src-header ()
+  "Copy the most recent #+begin_src header line (with all its properties)
+and insert it at point, ready for a new block."
+  (interactive)
+  (let ((header-re "^[ \t]*#\\+begin_src[ \t]+.*$")
+        header-line)
+    (save-excursion
+      (when (re-search-backward header-re nil t)
+        (setq header-line (thing-at-point 'line t))
+        (when header-line
+          (goto-char (point-max))  ; safety: don't insert mid-line
+          (insert "\n" (string-trim header-line) "\n\n#+end_src\n")))))
+    (unless header-line
+      (user-error "No #+begin_src header found above point")))

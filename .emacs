@@ -38,3 +38,16 @@
 (org-babel-load-file
  (expand-file-name "dotfiles/custom.org"
 		   user-emacs-directory))
+
+;; -------------------------------------------------
+
+;; Load all .el files in ./custom/
+(let ((custom-dir (expand-file-name "custom" user-emacs-directory)))
+  (when (file-exists-p custom-dir)
+	(dolist (file (directory-files custom-dir t "\\.el$"))
+	  (load file))))
+;; -------------------------------------------------
+;; create a variable to store the path to the org file
+(setq custom-dir-path (expand-file-name "custom" user-emacs-directory))
+;; -------------------------------------------------
+
