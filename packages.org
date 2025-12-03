@@ -21,7 +21,7 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
 
   ;; Doom themes
   (use-package doom-themes)
-  (load-theme 'doom-plain-dark t)
+  (load-theme 'doom-one t)
 
   ;; ;; Treemacs
   (use-package treemacs)
@@ -83,7 +83,7 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
 #+end_src
 
 #+RESULTS:
-| flyspell-mode | #[nil ((org-superstar-mode 1)) nil] | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+: t
 
 * Minibuffer
 #+begin_src elisp

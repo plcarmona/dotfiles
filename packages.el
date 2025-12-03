@@ -18,7 +18,7 @@
 
 ;; Doom themes
 (use-package doom-themes)
-(load-theme 'doom-plain-dark t)
+(load-theme 'doom-one t)
 
 ;; ;; Treemacs
 (use-package treemacs)
