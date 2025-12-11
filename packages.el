@@ -176,11 +176,16 @@
 (use-package lsp-mode
   :commands lsp lsp-deferred
   :hook (python-mode . lsp-deferred) ; Start pyright automatically for Python
+  :hook (rustic-mode . lsp-deferred) ; Start rust-analyzer automatically for Rust
   :config
   (setq lsp-diagnostics-provider :flymake)
   ;; Optional: Reduce noise
   (setq lsp-auto-guess-root nil)
   (setq lsp-log-io nil)
+  (setq lsp-rust-server 'rust-analyzer)
+  (setq lsp-rust-analyzer-server-command '("rustup" "run" "stable" "rust-analyzer"))
+  (setq lsp-enable-snippet nil)
+
   )
 
 ;; Use pyright as the LSP server for Python
@@ -211,13 +216,23 @@
 
 (use-package pyvenv)
 
-;; Emacs As Terminal (EAT) package installation
-(straight-use-package
- '(eat :type git
-       :host codeberg
-       :repo "akib/emacs-eat"
-       :files ("*.el" ("term" "term/*.el") "*.texi"
-               "*.ti" ("terminfo/e" "terminfo/e/*")
-               ("terminfo/65" "terminfo/65/*")
-               ("integration" "integration/*")
-               (:exclude ".dir-locals.el" "*-tests.el"))))
+;; Rustic Mode (enhanced Rust editing)
+(use-package rustic
+  :ensure t
+  :bind (:map rustic-mode-map
+              ("M-j" . lsp-ui-imenu)  ; Jump to symbols
+              ("M-?" . lsp-find-references)  ; Find references
+              ("C-c C-c l" . flycheck-list-errors)  ; List errors
+              ("C-c C-c a" . lsp-execute-code-action)  ; Code actions
+              ("C-c C-c r" . lsp-rename)  ; Rename symbol
+              ("C-c C-c q" . lsp-workspace-restart)  ; Restart LSP
+              ("C-c C-c Q" . lsp-workspace-shutdown)  ; Shutdown LSP
+              ("C-c C-c s" . lsp-rust-analyzer-status))  ; Check server status
+  :config
+  ;; Optional: Reduce flashiness
+  ;; (setq lsp-eldoc-hook nil)
+  ;; (setq lsp-enable-symbol-highlighting nil)
+  ;; (setq lsp-signature-auto-activate nil)
+
+  ;; Format on save (uncomment to disable: (setq rustic-format-on-save nil))
+  (setq rustic-format-on-save t))
