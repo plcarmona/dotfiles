@@ -5,7 +5,7 @@
   :ensure t
   :hook (prog-mode . copilot-mode)
   :config
-  (define-key copilot-completion-map (kbd "C-`") 'copilot-accept-completion)
+  (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "C-~") 'copilot-accept-completion-by-word))
 ;; Disable indent warning
 (setq copilot-disable-prompt-on-indent t)

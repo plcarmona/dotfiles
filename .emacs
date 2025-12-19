@@ -22,7 +22,9 @@
 (straight-use-package 'org)
 (straight-use-package 'hyperbole)
 ;;hyperbole setup
-
+(setq create-lockfiles nil)
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+(setq auto-save-file-name-transforms `((".*" "~/.emacs.d/auto-save/" t)))
 (hyperbole-mode 1)
 
 ;; -------------------------------------------------

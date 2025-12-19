@@ -18,3 +18,15 @@
 
 #+RESULTS:
 : org-duplicate-last-src-header
+* SSH - funcs
+** fx machine
+#+begin_src elisp  
+(defun fx-machine ()
+  (interactive)
+  (dired "/sshx:alges@192.168.0.167:/home/alges"))
+
+#+end_src
+
+#+RESULTS:
+: fx-machine
+
