@@ -29,4 +29,14 @@
 
 #+RESULTS:
 : fx-machine
+* Load env and restart lsp
+#+begin_src elisp 
+  (defun load-env ()
+ " activate env and restart lsp"
+    (interactive)
+    (progn
+     (let ((py-env-path (concat default-directory ".env/")))
+         (pyvenv-activate py-env-path)
+         (lsp-restart-workspace))))
+#+end_src
 

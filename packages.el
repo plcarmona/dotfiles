@@ -236,3 +236,11 @@
 
   ;; Format on save (uncomment to disable: (setq rustic-format-on-save nil))
   (setq rustic-format-on-save t))
+
+(use-package arduino-cli-mode
+  :ensure t
+  :hook arduino-mode
+  :mode "\\.ino\\'"
+  :custom
+  (arduino-cli-warnings 'all)
+  (arduino-cli-verify t))
