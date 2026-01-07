@@ -159,17 +159,7 @@
 
 #+RESULTS:
 : kill-current-buffer
-* SpawnAterminal at dir
-#+begin_src emacs-lisp
-  ;;wt -d "C:\Path\To\Your\Directory"
-  ;; path of wt C:\Users\sofia\Downloads\Microsoft.WindowsTerminal_1.23.12811.0_x64\terminal-1.23.12811.0\wt.exe
-  (defun spawn-terminal-at-current-dir ()
-    "Open Windows Terminal at the current directory."
-    (interactive)
-    (let ((current-dir (expand-file-name default-directory)))
-  	(start-process "spawn-terminal" nil "C:\\Users\\sofia\\Downloads\\Microsoft.WindowsTerminal_1.23.12811.0_x64\\terminal-1.23.12811.0\\wt.exe" "-d" current-dir)))
-  (global-set-key (kbd "C-c t") 'spawn-terminal-at-current-dir)
+* Find-file <f8>
+#+begin_src
+(global-set-key (kbd "<f8>") 'find-file)
 #+end_src
-
-#+RESULTS:
-: spawn-terminal-at-current-dir
