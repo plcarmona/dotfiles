@@ -163,3 +163,6 @@
 #+begin_src elisp
 (global-set-key (kbd "<f8>") 'find-file)
 #+end_src
+
+#+RESULTS:
+: find-file
