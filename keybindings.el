@@ -112,12 +112,3 @@
    ("C-c n y" . org-roam-dailies-goto-yesterday))
 
 (global-set-key (kbd "M-<f4>") 'kill-current-buffer)
-
-;;wt -d "C:\Path\To\Your\Directory"
-;; path of wt C:\Users\sofia\Downloads\Microsoft.WindowsTerminal_1.23.12811.0_x64\terminal-1.23.12811.0\wt.exe
-(defun spawn-terminal-at-current-dir ()
-  "Open Windows Terminal at the current directory."
-  (interactive)
-  (let ((current-dir (expand-file-name default-directory)))
-	(start-process "spawn-terminal" nil "C:\\Users\\sofia\\Downloads\\Microsoft.WindowsTerminal_1.23.12811.0_x64\\terminal-1.23.12811.0\\wt.exe" "-d" current-dir)))
-(global-set-key (kbd "C-c t") 'spawn-terminal-at-current-dir)
