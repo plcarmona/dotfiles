@@ -160,6 +160,6 @@
 #+RESULTS:
 : kill-current-buffer
 * Find-file <f8>
-#+begin_src
+#+begin_src elisp
 (global-set-key (kbd "<f8>") 'find-file)
 #+end_src
