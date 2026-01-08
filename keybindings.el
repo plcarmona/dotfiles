@@ -112,3 +112,5 @@
    ("C-c n y" . org-roam-dailies-goto-yesterday))
 
 (global-set-key (kbd "M-<f4>") 'kill-current-buffer)
+
+(global-set-key (kbd "<f8>") 'find-file)

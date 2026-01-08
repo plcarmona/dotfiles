@@ -152,6 +152,7 @@
 
 #+RESULTS:
 : org-roam-dailies-goto-yesterday
+
 * KillBuffer
 #+begin_src emacs-lisp
 (global-set-key (kbd "M-<f4>") 'kill-current-buffer)
@@ -159,6 +160,7 @@
 
 #+RESULTS:
 : kill-current-buffer
+
 * Find-file <f8>
 #+begin_src elisp
 (global-set-key (kbd "<f8>") 'find-file)
