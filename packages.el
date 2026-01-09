@@ -21,7 +21,18 @@
 (load-theme 'doom-one t)
 
 ;; ;; Treemacs
-(use-package treemacs)
+(use-package treemacs
+  :config
+  ;; 1. Set the border/fringe style
+  (setq treemacs-fringe-indicator-mode 'always)
+  (setq window-divider-default-right-width 1)
+
+  ;; 2. Set the font size via hook
+  (add-hook 'treemacs-mode-hook 
+	    (lambda () (setq-local face-remapping-alist '((default (:height 1.0))))))
+          
+  ;; 3. Optional: Set a specific fringe color to make it look like a border
+  (set-face-background 'fringe (face-background 'default)))
 
 ;; ;; Treemacs icons
 (use-package treemacs-all-the-icons)
@@ -244,3 +255,27 @@
   :custom
   (arduino-cli-warnings 'all)
   (arduino-cli-verify t))
+
+(setq treesit-extra-load-path '("c:/Users/sofia/.emacs.d/tree-sitter"))
+
+
+(use-package treesit-auto
+:ensure t
+:custom
+(treesit-auto-install t)
+:config
+(global-treesit-auto-mode))
+
+(treesit-language-available-p 'typescript)
+(treesit-language-available-p 'tsx)
+
+(add-to-list 'auto-mode-alist '("\\.css\\'" . less-css-mode))
+;; (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
+;; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
+;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js-ts-mode))
+;; (add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
+
+(setq major-mode-remap-alist
+    '((typescript-mode . typescript-ts-mode)
+      (js-mode         . js-ts-mode)
+      (json-mode       . json-ts-mode)))
