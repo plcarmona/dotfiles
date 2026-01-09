@@ -12,3 +12,15 @@ and insert it at point, ready for a new block."
           (insert "\n" (string-trim header-line) "\n\n#+end_src\n")))))
     (unless header-line
       (user-error "No #+begin_src header found above point")))
+
+(defun fx-machine ()
+  (interactive)
+  (dired "/sshx:alges@192.168.0.167:/home/alges"))
+
+(defun load-env ()
+" activate env and restart lsp"
+   (interactive)
+   (progn
+    (let ((py-env-path (concat default-directory ".env/")))
+        (pyvenv-activate py-env-path)
+        (lsp-restart-workspace))))

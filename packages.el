@@ -1,92 +1,92 @@
 ;; Package instalation
-;; Copilot
-(use-package copilot
-  :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
-  :ensure t
-  :hook (prog-mode . copilot-mode)
-  :config
-  (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion)
-  (define-key copilot-completion-map (kbd "C-~") 'copilot-accept-completion-by-word))
-;; Disable indent warning
-(setq copilot-disable-prompt-on-indent t)
-(setq copilot-indent-offset-warning-disable 1)
-;; Magit
-(use-package magit)
+ ;; Copilot
+ (use-package copilot
+   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+   :ensure t
+   :hook (prog-mode . copilot-mode)
+   :config
+   (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion)
+   (define-key copilot-completion-map (kbd "C-~") 'copilot-accept-completion-by-word))
+ ;; Disable indent warning
+ (setq copilot-disable-prompt-on-indent t)
+ (setq copilot-indent-offset-warning-disable 1)
+ ;; Magit
+ (use-package magit)
 
-;; All-the-icons
-(use-package all-the-icons)
+ ;; All-the-icons
+ (use-package all-the-icons)
 
-;; Doom themes
-(use-package doom-themes)
+ ;; Doom themes
+ (use-package doom-themes)
 (load-theme 'doom-one t)
 
-;; ;; Treemacs
-(use-package treemacs
-  :config
-  ;; 1. Set the border/fringe style
-  (setq treemacs-fringe-indicator-mode 'always)
-  (setq window-divider-default-right-width 1)
+ ;; ;; Treemacs
+ (use-package treemacs
+   :config
+   ;; 1. Set the border/fringe style
+   (setq treemacs-fringe-indicator-mode 'always)
+   (setq window-divider-default-right-width 1)
 
-  ;; 2. Set the font size via hook
-  (add-hook 'treemacs-mode-hook 
-	    (lambda () (setq-local face-remapping-alist '((default (:height 1.0))))))
-          
-  ;; 3. Optional: Set a specific fringe color to make it look like a border
-  (set-face-background 'fringe (face-background 'default)))
+   ;; 2. Set the font size via hook
+   (add-hook 'treemacs-mode-hook 
+ 	    (lambda () (setq-local face-remapping-alist '((default (:height 1.0))))))
+           
+   ;; 3. Optional: Set a specific fringe color to make it look like a border
+   (set-face-background 'fringe (face-background 'default)))
 
-;; ;; Treemacs icons
-(use-package treemacs-all-the-icons)
-(treemacs-load-theme "all-the-icons")
+ ;; ;; Treemacs icons
+ (use-package treemacs-all-the-icons)
+ (treemacs-load-theme "all-the-icons")
 
-;; Superstar mode
-(use-package org-superstar
-  :straight (:host github :repo "integral-dw/org-superstar-mode")
-  :ensure t
-  :config
-  (org-superstar-configure-like-org-bullets)
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
-  (setq superstar-cycle-sequence '("◉" "◎" "○" "●")))
+ ;; Superstar mode
+ (use-package org-superstar
+   :straight (:host github :repo "integral-dw/org-superstar-mode")
+   :ensure t
+   :config
+   (org-superstar-configure-like-org-bullets)
+   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+   (setq superstar-cycle-sequence '("◉" "◎" "○" "●")))
 
-;; Markdown mode
-(use-package markdown-mode
-  :ensure t
-  :mode (("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :hook (markdown-mode . prettify-symbols-mode)
-  :custom
-  (prettify-symbols-alist
-   '(("#" . "•")    ; Level 1 heading
-     ("##" . "▪")   ; Level 2
-     ("###" . "▫")  ; Level 3
-     ("####" . "⁃") ; Level 4
-     ("*" . "•")    ; Bullet list
-     ("+" . "◦")    ; Alternative
-     ("-" . "–")
-     ("=>". "⇒")
-     ("<=" . "⇐")
-     ("lambda" . "λ")
-     ("->" . "→"))))
+ ;; Markdown mode
+ (use-package markdown-mode
+   :ensure t
+   :mode (("\\.md\\'" . markdown-mode)
+          ("\\.markdown\\'" . markdown-mode))
+   :hook (markdown-mode . prettify-symbols-mode)
+   :custom
+   (prettify-symbols-alist
+    '(("#" . "•")    ; Level 1 heading
+      ("##" . "▪")   ; Level 2
+      ("###" . "▫")  ; Level 3
+      ("####" . "⁃") ; Level 4
+      ("*" . "•")    ; Bullet list
+      ("+" . "◦")    ; Alternative
+      ("-" . "–")
+      ("=>". "⇒")
+      ("<=" . "⇐")
+      ("lambda" . "λ")
+      ("->" . "→"))))
 
-;; Enable src block execution in markdown
-(use-package md-babel
-  :straight (:host github :repo "md-babel/md-babel.el")
-  :ensure t
-  :after markdown-mode
-  :config
-  (define-key markdown-mode-command-map (kbd "C-c") #'md-babel-execute-block-at-point)) 
+ ;; Enable src block execution in markdown
+ (use-package md-babel
+   :straight (:host github :repo "md-babel/md-babel.el")
+   :ensure t
+   :after markdown-mode
+   :config
+   (define-key markdown-mode-command-map (kbd "C-c") #'md-babel-execute-block-at-point)) 
 
-;; Recentf
-(use-package recentf)
-(recentf-mode 1)
-(setq recentf-max-saved-items 20)
+ ;; Recentf
+ (use-package recentf)
+ (recentf-mode 1)
+ (setq recentf-max-saved-items 20)
 
 
-;; Enable spell checking in org-mode
-(add-hook 'org-mode-hook 'flyspell-mode)
+ ;; Enable spell checking in org-mode
+ (add-hook 'org-mode-hook 'flyspell-mode)
 
-(use-package centered-window
-  :config
-  (centered-window-mode t))
+ (use-package centered-window
+   :config
+   (centered-window-mode t))
 
 ;; Consult/Vertico and styling setup
 ;; Minibuffer completion framework
@@ -149,16 +149,23 @@
               (if (file-exists-p cand)
                   (insert-file-contents cand nil 0 1000)
                 (insert (format "Preview: %s" cand)))))))))
-    
-   ;; Define variables here
-   ;; -------------------------------------------------- ;;
-   ;; Display line numbers
-   (setq display-line-numbers-type `relative)
-   (setq display-line-numbers-mode t)
-   (global-display-line-numbers-mode)
 
-   ;; Set Font to MonaspaceNeonNF-Regular
-   (set-face-attribute 'default nil :height 180 :weight 'normal :family "MonaspaceNeonNF-Regular")
+;; Define variables here
+;; -------------------------------------------------- ;;
+;; Display line numbers
+(setq display-line-numbers-type `relative)
+(setq display-line-numbers-mode t)
+(global-display-line-numbers-mode)
+
+;; Set Font to MonaspaceNeonNF-Regular
+(setq font-variable "PT Mono")
+;; if font variable exist, set to that font else set to MonaspaceNeonNF-Regular
+(if (member font-variable (font-family-list))
+    (set-face-attribute 'default nil :height 180 :weight 'normal :family font-variable)
+  (set-face-attribute 'default nil :height 180 :weight 'normal :family "MonospaceNeonNF-Regular"))
+
+
+  
    ;; hide tool-bar and menu-bar
    (tool-bar-mode -1)
    (menu-bar-mode -1)
