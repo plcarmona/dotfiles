@@ -1,4 +1,4 @@
-* BaseConfig
+* TODO BaseConfig
 Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown mode, Recentf, Spell checking
 #+begin_src elisp
   ;; Package instalation
@@ -24,7 +24,18 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
   (load-theme 'doom-one t)
 
   ;; ;; Treemacs
-  (use-package treemacs)
+  (use-package treemacs
+    :config
+    ;; 1. Set the border/fringe style
+    (setq treemacs-fringe-indicator-mode 'always)
+    (setq window-divider-default-right-width 1)
+
+    ;; 2. Set the font size via hook
+    (add-hook 'treemacs-mode-hook 
+  	    (lambda () (setq-local face-remapping-alist '((default (:height 1.0))))))
+            
+    ;; 3. Optional: Set a specific fringe color to make it look like a border
+    (set-face-background 'fringe (face-background 'default)))
 
   ;; ;; Treemacs icons
   (use-package treemacs-all-the-icons)
@@ -289,6 +300,11 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
     :mode "\\.tsx\\'"
     :custom
     (tsx-mode-enable-css-in-js t))
+  ;; ad hook
+  (add-hook 'tsx-mode-hook
+			(lambda ()
+			  (flymake-jsts-setup)
+			  (flymake-stylelint-setup)))
 #+end_src
 
 #+RESULTS:
