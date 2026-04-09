@@ -14,21 +14,17 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+
 (straight-use-package 'project)
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 (setq use-package-always-ensure t)
 (straight-use-package 'use-package)
 (straight-use-package 'org)
-(straight-use-package 'hyperbole)
-(let ((auto-save-dir "c:/Users/sofia/.emacs.d/auto-save/"))
-  (unless (file-exists-p auto-save-dir)
-    (make-directory auto-save-dir t)))
+
 (setq create-lockfiles nil)
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/auto-save/" t)))
-(hyperbole-mode 1)
-(global-visual-line-mode 1)
 
 ;; -------------------------------------------------
 ;; -------------------------------------------------
