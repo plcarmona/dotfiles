@@ -70,14 +70,12 @@
 (use-package org-roam
   :ensure t
   :custom
-  (org-roam-directory (file-truename "~/notes/"))
+  (org-roam-directory (file-truename "~/roam/"))
   :config
   (org-roam-db-autosync-mode)
   :bind (("C-c n l" . org-roam-buffer-toggle)
-		 ("C-c n f" . org-roam-node-find)
-		 ("C-c n i" . org-roam-node-insert)
-		 ("C-c n c" . org-roam-capture)
-		 ;; Dailies
+		 ("<f7>" . org-roam-node-find)
+		 ("C-<f7>" . org-roam-node-insert)
 		 ("C-c n j" . org-roam-dailies-capture-today))
   )
 

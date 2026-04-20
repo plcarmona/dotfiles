@@ -25,7 +25,6 @@
 (setq create-lockfiles nil)
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms `((".*" "~/.emacs.d/auto-save/" t)))
-
 ;; -------------------------------------------------
 ;; -------------------------------------------------
 (org-babel-load-file

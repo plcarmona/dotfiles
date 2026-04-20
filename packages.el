@@ -1,4 +1,4 @@
- ;; Package instalation
+;; Package instalation
  ;; Copilot
  (use-package copilot
    :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
@@ -33,7 +33,7 @@
  ;; Recentf
  (use-package recentf)
  (recentf-mode 1)
- (setq recentf-max-saved-items 20)
+ (setq recentf-max-saved-items 50)
 
 ;; Consult/Vertico and styling setup
 ;; Minibuffer completion framework
@@ -74,7 +74,77 @@
   :config
   (marginalia-mode))
 
-   (defun my/complete-from-list (items &optional prompt initial)
+(use-package treesit-auto
+  :ensure t
+  :custom
+  (treesit-auto-install t)
+  :config
+  (global-treesit-auto-mode 1))   ; el 1 es más explícito
+
+;; === REMAPEO CORRECTO PARA PYTHON (importante) ===
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+
+;; === Configuración limpia del font-lock para Python ===
+(add-hook 'python-ts-mode-hook
+          (lambda ()
+            ;; Bajamos el nivel de highlighting para evitar el bug del query "self"
+            (setq-local treesit-font-lock-level 2)
+
+            ;; Opcional: si querés un control más fino (recomendado)
+            ;; (setq-local treesit-font-lock-feature-list
+            ;;             '((comment definition)
+            ;;               (keyword string number type)
+            ;;               (assignment builtin constant)
+            ;;               (function bracket delimiter operator variable)))
+            ))
+
+;; Si usás lsp-mode / eglot, usá el hook base (funciona para ambos modos)
+(add-hook 'python-base-mode-hook 'lsp-deferred)     ; si usás lsp-mode
+;; o
+;; (add-hook 'python-base-mode-hook 'eglot-ensure)   ; si usás eglot
+;;(treesit-install-language-grammar 'python)
+
+;; ------------------------------------------------------------
+  ;; 1. LSP Mode for Intelligence (pyright)
+  ;; ------------------------------------------------------------
+  (use-package lsp-mode
+    :commands lsp lsp-deferred
+    :hook (python-ts-mode . lsp-deferred) ; Start pyright automatically for Python
+    :config
+    (setq lsp-diagnostics-provider :flymake)
+    (setq lsp-auto-guess-root nil)
+    (setq lsp-log-io nil)
+    (setq lsp-enable-snippet nil))
+
+
+  ;; Use pyright as the LSP server for Python
+  (use-package lsp-pyright
+    :ensure t
+    :hook (python-ts-mode . (lambda ()
+                            (require 'lsp-pyright)
+                            ;; Optional: Disable pyright's formatting if you want ruff to handle it
+                            (setq-local lsp-pyright-disable-diagnostics t) ; Let ruff handle diagnostics
+                            (setq-local lsp-pyright-disable-organize-imports t))) ; Let ruff handle imports
+  			  
+    :config
+    ;; Use ruff for diagnostics instead of pyright
+    (lsp-register-custom-settings
+     '(("pyright.disableDiagnostics" t t)))
+    )
+
+  ;; ------------------------------------------------------------
+  ;; 2. Company for Autocompletion (provided by pyright)
+  ;; ------------------------------------------------------------
+  ;; (use-package company
+  ;;   :ensure t
+  ;;   :hook (lsp-mode . company-mode)
+  ;;   :config
+  ;;   (setq company-minimum-prefix-length 1)
+  ;;   (setq company-tooltip-align-annotations t)
+  ;;   )
+;; O más agresivo (desactiva todo lo custom de python-ts):
+
+(defun my/complete-from-list (items &optional prompt initial)
      (interactive)
      (let ((prompt (or prompt "Select item: ")))
        (minibuffer-with-setup-hook
@@ -108,8 +178,8 @@
 (setq font-variable "PT Mono")
 ;; if font variable exist, set to that font else set to MonaspaceNeonNF-Regular
 (if (member font-variable (font-family-list))
-    (set-face-attribute 'default nil :height 180 :weight 'normal :family font-variable)
-  (set-face-attribute 'default nil :height 180 :weight 'normal :family "MonospaceNeonNF-Regular"))
+    (set-face-attribute 'default nil :height 100 :weight 'normal :family font-variable)
+  (set-face-attribute 'default nil :height 100 :weight 'normal :family "MonospaceNeonNF-Regular"))
 
 
   
@@ -132,92 +202,9 @@
  ;; Disable sound
  (setq ring-bell-function 'ignore)
 
-
-;; ------------------------------------------------------------
-;; 1. LSP Mode for Intelligence (pyright)
-;; ------------------------------------------------------------
-(use-package lsp-mode
-  :commands lsp lsp-deferred
-  :hook (python-mode . lsp-deferred) ; Start pyright automatically for Python
-  :hook (rustic-mode . lsp-deferred) ; Start rust-analyzer automatically for Rust
-  :config
-  (setq lsp-diagnostics-provider :flymake)
-  ;; Optional: Reduce noise
-  (setq lsp-auto-guess-root nil)
-  (setq lsp-log-io nil)
-  (setq lsp-rust-server 'rust-analyzer)
-  (setq lsp-rust-analyzer-server-command '("rustup" "run" "stable" "rust-analyzer"))
-  (setq lsp-enable-snippet nil)
-
-  )
-
-;; Use pyright as the LSP server for Python
-(use-package lsp-pyright
-  :ensure t
-  :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          ;; Optional: Disable pyright's formatting if you want ruff to handle it
-                          (setq-local lsp-pyright-disable-diagnostics t) ; Let ruff handle diagnostics
-                          (setq-local lsp-pyright-disable-organize-imports t) ; Let ruff handle imports
-                          ))
-  :config
-  ;; Use ruff for diagnostics instead of pyright
-  (lsp-register-custom-settings
-   '(("pyright.disableDiagnostics" t t)))
-  )
-
-;; ------------------------------------------------------------
-;; 2. Company for Autocompletion (provided by pyright)
-;; ------------------------------------------------------------
-(use-package company
-  :ensure t
-  :hook (lsp-mode . company-mode)
-  :config
-  (setq company-minimum-prefix-length 1)
-  (setq company-tooltip-align-annotations t)
-  )
+(use-package ox-reveal)
+(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/")
+(setq org-reveal-theme "black")
 
 (use-package pyvenv)
-
-
-(use-package arduino-cli-mode
-  :ensure t
-  :hook arduino-mode
-  :mode "\\.ino\\'"
-  :custom
-  (arduino-cli-warnings 'all)
-  (arduino-cli-verify t))
-;; hook .ino to c mode
-
-(use-package treesit-auto
-:ensure t
-:custom
-(treesit-auto-install t)
-:config
-(global-treesit-auto-mode))
-
-(treesit-language-available-p 'typescript)
-(treesit-language-available-p 'tsx)
-
-(add-to-list 'auto-mode-alist '("\\.css\\'" . less-css-mode))
-(add-to-list 'auto-mode-alist '("\\.ino\\'" . arduino-cli-mode))
-(add-to-list 'auto-mode-alist '("\\.ino\\'" . c++-mode))
-
-;; 2. Activar arduino-cli-mode automáticamente al entrar en C++ solo si es un .ino
-(add-hook 'c++-mode-hook
-	    (lambda ()
-	      (when (and buffer-file-name (string-match "\\.ino\\'" buffer-file-name))
-		(arduino-cli-mode 1))))
-
-;; (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-ts-mode))
-;; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-ts-mode))
-;; (add-to-list 'auto-mode-alist '("\\.js\\'" . js-ts-mode))
-;; (add-to-list 'auto-mode-alist '("\\.json\\'" . json-ts-mode))
-
-(setq major-mode-remap-alist
-    '((typescript-mode . typescript-ts-mode)
-      (js-mode         . js-ts-mode)
-      (json-mode       . json-ts-mode)))
-
-
-
+(pyvenv-tracking-mode 1)

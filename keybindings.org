@@ -70,6 +70,10 @@
   (global-set-key (kbd "<f5>") 'copilot-mode)
   (global-set-key (kbd "C-<f5>") 'async-shell-command)
 #+end_src
+
+#+RESULTS:
+: async-shell-command
+
 * C-c shortcuts
 #+begin_src emacs-lisp
   ;; Keybindings
@@ -108,14 +112,12 @@
   (use-package org-roam
     :ensure t
     :custom
-    (org-roam-directory (file-truename "~/notes/"))
+    (org-roam-directory (file-truename "~/roam/"))
     :config
     (org-roam-db-autosync-mode)
     :bind (("C-c n l" . org-roam-buffer-toggle)
-  		 ("C-c n f" . org-roam-node-find)
-  		 ("C-c n i" . org-roam-node-insert)
-  		 ("C-c n c" . org-roam-capture)
-  		 ;; Dailies
+  		 ("<f7>" . org-roam-node-find)
+  		 ("C-<f7>" . org-roam-node-insert)
   		 ("C-c n j" . org-roam-dailies-capture-today))
     )
 
@@ -151,7 +153,6 @@
 #+end_src
 
 #+RESULTS:
-: org-roam-dailies-goto-yesterday
 
 * KillBuffer
 #+begin_src emacs-lisp
@@ -168,3 +169,14 @@
 
 #+RESULTS:
 : find-file
+
+* python map
+#+begin_src emacs-lisp
+  (add-hook 'python-mode-hook
+  		  (lambda ()
+  		  (local-set-key (kbd "M-<return>") 'lsp-goto-type-definition)
+  		  (local-set-key (kbd "M-S-<return>") 'lsp-find-references)))
+#+end_src
+
+#+RESULTS:
+| #[nil ((progn 'delete-other-windows)) nil] | #[nil ((progn delete-other-windows)) nil] | #[nil (delete-other-windows) nil] | delete-other-windows |
