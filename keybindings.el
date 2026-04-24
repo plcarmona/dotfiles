@@ -3,6 +3,7 @@
 (global-set-key (kbd "C-c z") 'Aux)
 (define-key Aux (kbd "c") '(lambda () (interactive) (find-file "~/.emacs.d/dotfiles/.emacs")))
 
+
 ;; -------------------------------------------------
 (define-prefix-command 'my/git-map)
 (global-set-key (kbd "<f6>") 'my/git-map) 
@@ -67,6 +68,9 @@
 (global-set-key (kbd "C-c l g r") 'lsp-find-references)
 (global-set-key (kbd "C-c l g i") 'lsp-find-implementation)
 
+
+
+
 (use-package org-roam
   :ensure t
   :custom
@@ -112,3 +116,8 @@
 (global-set-key (kbd "M-<f4>") 'kill-current-buffer)
 
 (global-set-key (kbd "<f8>") 'find-file)
+
+(add-hook 'python-mode-hook
+		  (lambda ()
+		  (local-set-key (kbd "M-<return>") 'lsp-goto-type-definition)
+		  (local-set-key (kbd "M-S-<return>") 'lsp-find-references)))

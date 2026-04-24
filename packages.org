@@ -187,8 +187,8 @@ Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown m
   (setq font-variable "PT Mono")
   ;; if font variable exist, set to that font else set to MonaspaceNeonNF-Regular
   (if (member font-variable (font-family-list))
-      (set-face-attribute 'default nil :height 100 :weight 'normal :family font-variable)
-    (set-face-attribute 'default nil :height 100 :weight 'normal :family "MonospaceNeonNF-Regular"))
+      (set-face-attribute 'default nil :height 120 :weight 'normal :family font-variable)
+    (set-face-attribute 'default nil :height 120 :weight 'normal :family "MonospaceNeonNF-Regular"))
 
 
     

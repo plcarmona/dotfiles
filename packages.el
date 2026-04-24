@@ -1,4 +1,4 @@
-;; Package instalation
+ ;; Package instalation
  ;; Copilot
  (use-package copilot
    :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
@@ -75,36 +75,18 @@
   (marginalia-mode))
 
 (use-package treesit-auto
-  :ensure t
-  :custom
-  (treesit-auto-install t)
-  :config
-  (global-treesit-auto-mode 1))   ; el 1 es más explícito
+:ensure t
+:custom
+(treesit-auto-install 'prompt)   ; te pregunta antes de instalar, más seguro
+:config
+(global-treesit-auto-mode 1)
 
-;; === REMAPEO CORRECTO PARA PYTHON (importante) ===
-(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+;; Remapeo explícito para Python (por las dudas)
+(add-to-list 'major-mode-remap-alist '(python-ts-mode . python-mode)))
 
-;; === Configuración limpia del font-lock para Python ===
-(add-hook 'python-ts-mode-hook
-          (lambda ()
-            ;; Bajamos el nivel de highlighting para evitar el bug del query "self"
-            (setq-local treesit-font-lock-level 2)
 
-            ;; Opcional: si querés un control más fino (recomendado)
-            ;; (setq-local treesit-font-lock-feature-list
-            ;;             '((comment definition)
-            ;;               (keyword string number type)
-            ;;               (assignment builtin constant)
-            ;;               (function bracket delimiter operator variable)))
-            ))
 
-;; Si usás lsp-mode / eglot, usá el hook base (funciona para ambos modos)
-(add-hook 'python-base-mode-hook 'lsp-deferred)     ; si usás lsp-mode
-;; o
-;; (add-hook 'python-base-mode-hook 'eglot-ensure)   ; si usás eglot
-;;(treesit-install-language-grammar 'python)
-
-;; ------------------------------------------------------------
+  ;; ------------------------------------------------------------
   ;; 1. LSP Mode for Intelligence (pyright)
   ;; ------------------------------------------------------------
   (use-package lsp-mode
@@ -144,7 +126,8 @@
   ;;   )
 ;; O más agresivo (desactiva todo lo custom de python-ts):
 
-(defun my/complete-from-list (items &optional prompt initial)
+
+   (defun my/complete-from-list (items &optional prompt initial)
      (interactive)
      (let ((prompt (or prompt "Select item: ")))
        (minibuffer-with-setup-hook
@@ -178,8 +161,8 @@
 (setq font-variable "PT Mono")
 ;; if font variable exist, set to that font else set to MonaspaceNeonNF-Regular
 (if (member font-variable (font-family-list))
-    (set-face-attribute 'default nil :height 100 :weight 'normal :family font-variable)
-  (set-face-attribute 'default nil :height 100 :weight 'normal :family "MonospaceNeonNF-Regular"))
+    (set-face-attribute 'default nil :height 120 :weight 'normal :family font-variable)
+  (set-face-attribute 'default nil :height 120 :weight 'normal :family "MonospaceNeonNF-Regular"))
 
 
   
@@ -201,6 +184,7 @@
 
  ;; Disable sound
  (setq ring-bell-function 'ignore)
+
 
 (use-package ox-reveal)
 (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/")
