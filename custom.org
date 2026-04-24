@@ -18,3 +18,13 @@
 
 #+RESULTS:
 : org-duplicate-last-src-header
+* Launch Terminal
+#+begin_src elisp
+(global-set-key (kbd "s-<return>") '(lambda ()
+				      (interactive)
+				      (start-process "alacritty" nil "alacritty" "--working-directory" (expand-file-name default-directory))))
+
+#+end_src
+
+#+RESULTS:
+| lambda | nil | (interactive) | (start-process alacritty nil alacritty --working-directory (expand-file-name default-directory)) |
