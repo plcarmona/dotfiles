@@ -1,3 +1,18 @@
+ ;; --- UTF-8 everywhere (prevents latin1 mojibake in notes) ---
+ (set-language-environment "UTF-8")
+ (prefer-coding-system 'utf-8)            ; UTF-8 for all file I/O
+ (set-default-coding-systems 'utf-8)      ; default for new buffers
+ (set-terminal-coding-system 'utf-8)
+ (set-keyboard-coding-system 'utf-8)
+ (set-selection-coding-system 'utf-8)     ; clipboard/selection paste (the actual bug fix)
+ (set-clipboard-coding-system 'utf-8)
+ (setq locale-coding-system 'utf-8)
+ (set-file-name-coding-system 'utf-8)
+
+ ;; New org notes use CRLF to match the roam convention (code files stay LF)
+ (add-hook 'org-mode-hook
+           (lambda () (setq buffer-file-coding-system 'utf-8-dos)))
+
  ;; Package instalation
  ;; Copilot
  (use-package copilot
@@ -156,6 +171,8 @@
 (setq display-line-numbers-type `relative)
 (setq display-line-numbers-mode t)
 (global-display-line-numbers-mode)
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+
 
 ;; Set Font to MonaspaceNeonNF-Regular
 (setq font-variable "PT Mono")
@@ -176,6 +193,13 @@
 ;; Enable shift selection in org-mode
 (setq org-support-shift-select t)
 
+;; Org babel lang
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)
+   (shell . t)
+   (emacs-lisp . t)))
+
 ;; Set python interpreter for org-babel
 (setq org-babel-python-command "uv run python")
 
@@ -186,9 +210,36 @@
  (setq ring-bell-function 'ignore)
 
 
-(use-package ox-reveal)
-(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/")
-(setq org-reveal-theme "black")
+(use-package org-re-reveal
+  :ensure t)
+
+(setq org-re-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.4.0/")
+(setq org-re-reveal-revealjs-version "4.4.0")
+(setq org-re-reveal-theme "black")
+(setq org-re-reveal-transition "linear")
+
+;; Plugins
+(setq org-re-reveal-plugins '(highlight))
+
+;; Extra scripts
+(setq org-re-reveal-extra-scripts
+      '("https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js"))
+(setq org-re-reveal-init-script
+      "Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        slideNumber: 'c',
+        transition: 'linear',
+        plugins: [ RevealHighlight ]
+      });
+
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'dark'
+      });")
 
 (use-package pyvenv)
 (pyvenv-tracking-mode 1)
+(use-package eat)

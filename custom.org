@@ -20,7 +20,7 @@
 : org-duplicate-last-src-header
 * Launch Terminal
 #+begin_src elisp
-(global-set-key (kbd "s-<return>") '(lambda ()
+(global-set-key (kbd "C-s-<return>") '(lambda ()
 				      (interactive)
 				      (start-process "alacritty" nil "alacritty" "--working-directory" (expand-file-name default-directory))))
 

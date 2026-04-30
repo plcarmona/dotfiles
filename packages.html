@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title></title>
+<meta name="author" content=""/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/theme/black.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><p class="date">Created: 2026-05-22 Fri 14:02</p>
+</section>
+<section id="sec-table-of-contents"><div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#/slide-orgc614099">1. BaseConfig</a></li>
+<li><a href="#/slide-orgdff4af6">2. Minibuffer</a></li>
+<li><a href="#/slide-org8109b2f">3. Treesit</a></li>
+<li><a href="#/slide-org3d35b1c">4. LSP Python</a></li>
+<li><a href="#/slide-org57ffa60">5. General Settings</a></li>
+<li><a href="#/slide-org151f715">6. Org-Reveal</a></li>
+<li><a href="#/slide-org1c173b4">7. Eat</a></li>
+</ul>
+</div>
+</div>
+</section>
+<section>
+<section id="slide-orgc614099">
+<h2 id="orgc614099"><span class="section-number-2">1.</span> BaseConfig</h2>
+<p>
+Copilot, Magit, All-the-icons, Doom themes, Treemacs, Superstar mode, Markdown mode, Recentf, Spell checking
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-elisp"   ><code trim> ;; Package instalation
+ ;; Copilot
+ (use-package copilot
+   :straight (:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
+   :ensure t
+   :hook (prog-mode . copilot-mode)
+   :config
+   (define-key copilot-completion-map (kbd "C-&lt;tab&gt;") 'copilot-accept-completion)
+   (define-key copilot-completion-map (kbd "C-~") 'copilot-accept-completion-by-word))
+ ;; Disable indent warning
+ (setq copilot-disable-prompt-on-indent t)
+ (setq copilot-indent-offset-warning-disable 1)
+ ;; Magit
+ (use-package magit)
+
+ ;; All-the-icons
+ (use-package all-the-icons)
+
+ ;; Doom themes
+ (use-package doom-themes)
+(load-theme 'doom-one t)
+
+ ;; Superstar mode
+ (use-package org-superstar
+   :straight (:host github :repo "integral-dw/org-superstar-mode")
+   :ensure t
+   :config
+   (org-superstar-configure-like-org-bullets)
+   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1)))
+   (setq superstar-cycle-sequence '("◉" "◎" "○" "●")))
+
+
+ ;; Recentf
+ (use-package recentf)
+ (recentf-mode 1)
+ (setq recentf-max-saved-items 50)
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgdff4af6">
+<h2 id="orgdff4af6"><span class="section-number-2">2.</span> Minibuffer</h2>
+<div class="org-src-container">
+
+<pre  class="src src-elisp"   ><code trim>;; Consult/Vertico and styling setup
+;; Minibuffer completion framework
+;; Vertico for vertical completion
+;; Consult for enhanced commands
+;; Orderless for flexible matching
+;; Marginalia for annotations
+
+(use-package vertico
+  :ensure t
+  :config
+  (vertico-mode 1))
+
+;; (use-package vertico-posframe
+;;   :ensure t
+;;   :config
+;;   (vertico-posframe-mode 1)
+;;   (setq vertico-posframe-parameters
+;;         '((left-fringe . 8)
+;;           (right-fringe . 8)
+;;           (border-width . 2))))
+
+(use-package consult
+  :ensure t
+  :bind (("C-x C-m" . consult-buffer)
+         ("C-s" . consult-line)
+         ("C-x C-f" . consult-find)))
+
+(use-package orderless
+  :ensure t
+  :config
+  (setq completion-styles '(orderless)))
+;; (setq vertico-posframe-poshandler #'posframe-poshandler-frame-center)
+;; (setq vertico-posframe-border-width 1)
+
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode))
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org8109b2f">
+<h2 id="org8109b2f"><span class="section-number-2">3.</span> Treesit</h2>
+<div class="org-src-container">
+
+<pre  class="src src-elisp"   ><code trim>(use-package treesit-auto
+:ensure t
+:custom
+(treesit-auto-install 'prompt)   ; te pregunta antes de instalar, más seguro
+:config
+(global-treesit-auto-mode 1)
+
+;; Remapeo explícito para Python (por las dudas)
+(add-to-list 'major-mode-remap-alist '(python-ts-mode . python-mode)))
+
+
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3d35b1c">
+<h2 id="org3d35b1c"><span class="section-number-2">4.</span> LSP Python</h2>
+<div class="org-src-container">
+
+<pre  class="src src-elisp"   ><code trim>  ;; ------------------------------------------------------------
+  ;; 1. LSP Mode for Intelligence (pyright)
+  ;; ------------------------------------------------------------
+  (use-package lsp-mode
+    :commands lsp lsp-deferred
+    :hook (python-ts-mode . lsp-deferred) ; Start pyright automatically for Python
+    :config
+    (setq lsp-diagnostics-provider :flymake)
+    (setq lsp-auto-guess-root nil)
+    (setq lsp-log-io nil)
+    (setq lsp-enable-snippet nil))
+
+
+  ;; Use pyright as the LSP server for Python
+  (use-package lsp-pyright
+    :ensure t
+    :hook (python-ts-mode . (lambda ()
+                            (require 'lsp-pyright)
+                            ;; Optional: Disable pyright's formatting if you want ruff to handle it
+                            (setq-local lsp-pyright-disable-diagnostics t) ; Let ruff handle diagnostics
+                            (setq-local lsp-pyright-disable-organize-imports t))) ; Let ruff handle imports
+
+    :config
+    ;; Use ruff for diagnostics instead of pyright
+    (lsp-register-custom-settings
+     '(("pyright.disableDiagnostics" t t)))
+    )
+
+  ;; ------------------------------------------------------------
+  ;; 2. Company for Autocompletion (provided by pyright)
+  ;; ------------------------------------------------------------
+  ;; (use-package company
+  ;;   :ensure t
+  ;;   :hook (lsp-mode . company-mode)
+  ;;   :config
+  ;;   (setq company-minimum-prefix-length 1)
+  ;;   (setq company-tooltip-align-annotations t)
+  ;;   )
+;; O más agresivo (desactiva todo lo custom de python-ts):
+
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org57ffa60">
+<h2 id="org57ffa60"><span class="section-number-2">5.</span> General Settings</h2>
+<div class="org-src-container">
+
+<pre  class="src src-elisp"   ><code trim>   (defun my/complete-from-list (items &amp;optional prompt initial)
+     (interactive)
+     (let ((prompt (or prompt "Select item: ")))
+       (minibuffer-with-setup-hook
+           (lambda ()
+             (add-hook 'minibuffer-exit-hook
+                       (lambda () (kill-buffer "*Preview*"))
+                       nil t))
+         (completing-read
+          prompt
+          items
+          nil
+          t
+          initial
+          'my/complete-from-list-history
+          nil
+          (lambda (cand)
+            (with-current-buffer (get-buffer-create "*Preview*")
+              (erase-buffer)
+              (if (file-exists-p cand)
+                  (insert-file-contents cand nil 0 1000)
+                (insert (format "Preview: %s" cand)))))))))
+
+;; Define variables here
+;; -------------------------------------------------- ;;
+;; Display line numbers
+(setq display-line-numbers-type `relative)
+(setq display-line-numbers-mode t)
+(global-display-line-numbers-mode)
+
+;; Set Font to MonaspaceNeonNF-Regular
+(setq font-variable "PT Mono")
+;; if font variable exist, set to that font else set to MonaspaceNeonNF-Regular
+(if (member font-variable (font-family-list))
+    (set-face-attribute 'default nil :height 120 :weight 'normal :family font-variable)
+  (set-face-attribute 'default nil :height 120 :weight 'normal :family "MonospaceNeonNF-Regular"))
+
+
+
+   ;; hide tool-bar and menu-bar
+   (tool-bar-mode -1)
+   (menu-bar-mode -1)
+
+;; Set def directory
+(setq default-directory "~/")
+
+;; Enable shift selection in org-mode
+(setq org-support-shift-select t)
+
+;; Set python interpreter for org-babel
+(setq org-babel-python-command "uv run python")
+
+;; Enable src block execution whithout confirmation
+ (setq org-confirm-babel-evaluate nil)
+
+ ;; Disable sound
+ (setq ring-bell-function 'ignore)
+
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org151f715">
+<h2 id="org151f715"><span class="section-number-2">6.</span> Org-Reveal</h2>
+<div class="org-src-container">
+
+<pre  class="src src-elisp"   ><code trim>(use-package ox-reveal)
+(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/")
+(setq org-reveal-theme "black")
+(setq org-reveal-transition "linear")
+
+;; Extra scripts
+(setq org-reveal-extra-scripts
+      '("https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"
+        "https://cdn.jsdelivr.net/npm/reveal.js-mermaid-plugin@11.12.3/plugin/mermaid/mermaid.min.js"))
+
+;; Full initialization with plugins
+(setq org-reveal-init-script
+      "Reveal.initialize({
+        hash: true,
+        plugins: [ RevealHighlight, RevealMermaid ],
+        highlight: { 
+          beforeHighlight: function(hljs) { return hljs; }
+        },
+        mermaid: {
+          startOnLoad: false,
+          theme: 'dark'
+        }
+      });")
+
+  (use-package pyvenv)
+  (pyvenv-tracking-mode 1)
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org1c173b4">
+<h2 id="org1c173b4"><span class="section-number-2">7.</span> Eat</h2>
+<div class="org-src-container">
+
+<pre  class="src src-elisp"   ><code trim>(use-package eat)
+</code></pre>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/dist/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js@4.3.1/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+
+});
+
+</script>
+</body>
+</html>

@@ -12,3 +12,8 @@ and insert it at point, ready for a new block."
           (insert "\n" (string-trim header-line) "\n\n#+end_src\n")))))
     (unless header-line
       (user-error "No #+begin_src header found above point")))
+
+(global-set-key (kbd "C-s-<return>") '(lambda ()
+				      (interactive)
+				      (start-process "alacritty" nil "alacritty" "--working-directory" (expand-file-name default-directory))))
+
